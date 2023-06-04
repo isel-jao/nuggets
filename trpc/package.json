@@ -1,0 +1,22 @@
+{
+  "name": "trpc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server:dev": "npx nodemon --watch server --exec 'clear && npx ts-node server'",
+    "client:dev": "npx nodemon --watch client --exec 'clear && npx ts-node client'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^4.15.0",
+    "@trpc/client": "^10.29.1",
+    "@trpc/server": "^10.29.1",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "prisma": "^4.15.0"
+  }
+}
