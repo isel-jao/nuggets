@@ -20,10 +20,14 @@ async function main() {
 		{
 			firstName: "John",
 			lastName: "Doe",
+			email: "JohnDoe@email.com",
+			password: "password"
 		},
 		{
 			firstName: "Jane",
 			lastName: "Doe",
+			email: "JaneDoe@email.com",
+			password: "password"
 		},
 	]);
 	const users = await trpc.user.userList.query();
