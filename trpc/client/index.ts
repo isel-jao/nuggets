@@ -15,10 +15,10 @@ const trpc = createTRPCProxyClient<AppRouter>({
 
 
 async function main() {
-	await trpc.userDeleteAll.mutate();
-	await trpc.userCreateMany.mutate([
+	await trpc.user.userDeleteAll.mutate();
+	await trpc.user.userCreateMany.mutate([
 		{
-			firstName: "j",
+			firstName: "John",
 			lastName: "Doe",
 		},
 		{
@@ -26,7 +26,7 @@ async function main() {
 			lastName: "Doe",
 		},
 	]);
-	const users = await trpc.userList.query();
+	const users = await trpc.user.userList.query();
 	console.log({ users });
 }
 
