@@ -42,7 +42,7 @@ const authRouter = router({
 	logout: publicProcedure
 		.input(logoutSchema)
 		.mutation(async (opts) => {
-			const { accessToken, refreshToken } = logoutSchema.parse(opts);
+			const { accessToken, refreshToken } = logoutSchema.parse(opts.input);
 			const decodedTokens = {
 				accessToken: jwt.decode(accessToken) as DecodedToken,
 				refreshToken: jwt.decode(refreshToken) as DecodedToken,

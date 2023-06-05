@@ -26,13 +26,9 @@ export const isId = () => z.number().int({
 	message: 'Must be a positive integer',
 })
 
-export const isEmail = () => z.string().email({
-	message: 'Invalid email address',
-});
+export const isEmail = () => z.string()
 // 8 chars with lower and upper case letters, numbers and special chars
-export const isPassword = () => z.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/, {
-	message: 'Must be at least 8 characters long and contain at least one lowercase letter, one uppercase letter, one number and one special character',
-});
+export const isPassword = () => z.string()
 
 export async function hashPassword(password: string) {
 	const saltRounds = 10;
@@ -63,6 +59,8 @@ export async function verifyToken(token: string) {
 			message: 'Invalid refresh token',
 		})
 	}
+	console.log('token', token);
+
 	return jwt.verify(token, env.JWT_SECRET) as DecodedToken;
 }
 

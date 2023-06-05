@@ -1,41 +1,31 @@
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '../server';
-import { User } from '@prisma/client';
-//     👆 **type-only** import
 
-// Pass AppRouter as generic here. 👇 This lets the `trpc` object know
-// what procedures are available on the server and their input/output types.
+
 const trpc = createTRPCProxyClient<AppRouter>({
 	links: [
 		httpBatchLink({
 			url: 'http://localhost:3000',
+			headers: {
+				authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiaWF0IjoxNjg1OTc3NDU4LCJleHAiOjE2ODU5NzgzNTh9.3KDhUaQy3SOS8tqa8FNeyDqKsIlQ-hJml34V-M6fi1A`
+			}
 		}),
 	],
 });
 
-
 async function main() {
-	await trpc.user.userDeleteAll.mutate();
-	await trpc.user.userCreateMany.mutate([
-		{
-			firstName: "John",
-			lastName: "Doe",
-			email: "JohnDoe@email.com",
-			password: "password"
-		},
-		{
-			firstName: "Jane",
-			lastName: "Doe",
-			email: "JaneDoe@email.com",
-			password: "password"
-		},
-	]);
-	const users = await trpc.user.userList.query();
+	console.clear();
+
+	const posts = await trpc.post.findMany.query();
+	console.log({ posts });
+
+	const users = await trpc.user.findMany.query();
 	console.log({ users });
+
+
 }
 
 
 main().catch(err => {
 	console.error(err);
 });
-

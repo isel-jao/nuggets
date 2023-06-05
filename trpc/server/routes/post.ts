@@ -1,4 +1,4 @@
-import { publicProcedure, router } from '../trpc';
+import { authProcedure as procedure, router } from '../trpc';
 import prisma from '../common/prisma';
 import { z } from 'zod';
 import { isBetween } from '../utils';
@@ -16,33 +16,33 @@ export const updatePostSchema = createPostSchema.partial();
 
 const postRouter = router({
 
-	postList: publicProcedure
+	findMany: procedure
 		.query(async () => {
 			return await prisma.post.findMany();
 		}),
 
-	postById: publicProcedure
+	findUnique: procedure
 		.input(z.number())
 		.query(async (opts) => {
 			const { input } = opts;
 			return await prisma.post.findUnique({ where: { id: input } });
 		}),
 
-	postCreate: publicProcedure
+	create: procedure
 		.input(createPostSchema)
 		.mutation(async (opts) => {
 			const { input } = opts;
 			return await prisma.post.create({ data: input });
 		}),
 
-	postCreateMany: publicProcedure
+	createMany: procedure
 		.input(z.array(createPostSchema))
 		.mutation(async (opts) => {
 			const { input } = opts;
 			return await prisma.post.createMany({ data: input });
 		}),
 
-	postUpdate: publicProcedure
+	update: procedure
 		.input(z.object({
 			id: z.number(),
 			data: updatePostSchema,
@@ -53,14 +53,14 @@ const postRouter = router({
 			return await prisma.post.update({ where: { id }, data });
 		}),
 
-	postDelelte: publicProcedure
+	delete: procedure
 		.input(z.number())
 		.mutation(async (opts) => {
 			const { input } = opts;
 			return await prisma.post.delete({ where: { id: input } });
 		}),
 
-	postDeleteAll: publicProcedure
+	deleteMany: procedure
 		.mutation(async () => {
 			return await prisma.post.deleteMany();
 		}),

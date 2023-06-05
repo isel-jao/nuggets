@@ -1,4 +1,4 @@
-import { publicProcedure, router } from '../trpc';
+import { adminProcedure as procedure, router } from '../trpc';
 import prisma from '../common/prisma';
 import { z } from 'zod';
 import { isBetween, isEmail, isId } from '../utils';
@@ -12,25 +12,26 @@ export const createUserSchema = z.object({
 	lastName: isBetween(2, 50),
 	email: isEmail(),
 	password: z.string().min(8),
+	role: z.enum(['ADMIN', 'USER']).optional(),
 });
 
 export const updateUserSchema = createUserSchema.partial();
 
 const userRouter = router({
 
-	userList: publicProcedure
+	findMany: procedure
 		.query(async () => {
 			return await prisma.user.findMany();
 		}),
 
-	userById: publicProcedure
+	findUnique: procedure
 		.input(isId())
 		.query(async (opts) => {
 			const { input } = opts;
 			return await prisma.user.findUnique({ where: { id: input } });
 		}),
 
-	userCreate: publicProcedure
+	create: procedure
 		.input(createUserSchema)
 		.mutation(async (opts) => {
 			const { input } = opts;
@@ -45,7 +46,7 @@ const userRouter = router({
 			});
 		}),
 
-	userCreateMany: publicProcedure
+	createMany: procedure
 		.input(z.array(createUserSchema))
 		.mutation(async (opts) => {
 			const { input } = opts;
@@ -62,7 +63,7 @@ const userRouter = router({
 			});
 		}),
 
-	userUpdate: publicProcedure
+	update: procedure
 		.input(z.object({
 			id: isId(),
 			data: updateUserSchema,
@@ -73,20 +74,21 @@ const userRouter = router({
 			return await prisma.user.update({ where: { id }, data });
 		}),
 
-	userDelelte: publicProcedure
+	delete: procedure
 		.input(isId())
 		.mutation(async (opts) => {
 			const { input } = opts;
 			return await prisma.user.delete({ where: { id: input } });
 		}),
 
-	userDeleteAll: publicProcedure
+	deleteMany: procedure
 		.mutation(async () => {
 			return await prisma.user.deleteMany();
 		}),
 
 
-});
+},);
+
 
 
 export default userRouter;

@@ -1,4 +1,4 @@
-import { router } from './trpc';
+import { createContext, router } from './trpc';
 import { createHTTPServer } from '@trpc/server/adapters/standalone';
 import userRouter from './routes/user';
 import postRouter from './routes/post';
@@ -15,7 +15,7 @@ const appRouter = router({
 
 const server = createHTTPServer({
 	router: appRouter,
-	// createContext,
+	createContext,
 });
 
 server.listen(3000);
