@@ -1,6 +1,0 @@
-{
-    "watch": ["src"],
-    "ext": "ts",
-    "exec": "clear && npx ts-node src/main.ts"
-  }
-  
