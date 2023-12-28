@@ -84,13 +84,15 @@
 - default is greedy mode
 - to enable lazy mode add ? to quantifiers
 
-## Capturing groups //////////////////////////////////
+## Capturing groups
 
-// let str = 'my@mail.com @ his@site.com.uk';
+```javascript
+let str = "my@mail.com @ his@site.com.uk";
 
-// let regexp = /[-\w]+@([-\w]+\.)+\w+/ig;
+let regexp = /[-\w]+@([-\w]+\.)+\w+/gi;
 
-// console.log( str.match(regexp) );
+console.log(str.match(regexp)); // [ 'my@mail.com', 'his@site.com.uk' ]
+```
 
 ## BackReferences in pattern: \N and \k<name>
 
