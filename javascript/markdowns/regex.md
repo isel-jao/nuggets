@@ -121,26 +121,9 @@ console.log(str.replace(regexp, "javascript")); // javascript, javascript, css i
 
 ```javascript
 let regexp = /\w\*?Script/g;
-
 let str = "JavaScriptScript";
 
 str = str.match(regexp);
 
 console.log(str); // JavaScript
 ```
-
-///////////////////////////////////////////////////////////////////////////////
-// function DNAStrand(dna) {
-// return dna.replace(/./g, (match, patern1, patern2 , ..., offset, group) => DNAStrand.pairs[match]);
-// }
-
-// DNAStrand.pairs = {
-// A: "T",
-// T: "A",
-// C: "G",
-// G: "C",
-// };
-
-// let char = "AC";
-
-// console.log(DNAStrand("AAAACCCGGTT"));
