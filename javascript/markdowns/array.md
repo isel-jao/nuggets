@@ -32,4 +32,4 @@ let arr2 = [1, 2, 3];
 - `arr.filter(function)` -> returns a new array with the elements of arr for which function returns true
 - `arr.reduce(function)` -> returns a single value by executing function for each element in arr
 - `arr.every(function)` -> returns true if function returns true for all elements in arr
-- `arr.some(function)` -> returns true if function returns true for at least one element in arrS
+- `arr.some(function)` -> returns true if function returns true for at least one element in arr
