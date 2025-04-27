@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
  * @param callback - The function to run exactly once on component mount
  * @param cleanup - Optional function to run when the component unmounts
  */
-const useOnMount = (callback: () => void, cleanup?: () => void): void => {
+export function useOnMount(callback: () => void, cleanup?: () => void): void {
   const hasRun = useRef<boolean>(false);
 
   useEffect(() => {
@@ -29,6 +29,4 @@ const useOnMount = (callback: () => void, cleanup?: () => void): void => {
       }
     };
   }, []);
-};
-
-export default useOnMount;
+}

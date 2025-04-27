@@ -37,6 +37,10 @@ const links: SidebarGroup[] = [
         title: "useOnMount",
         url: "/custom-hooks/use-on-mount",
       },
+      {
+        title: "usePrev",
+        url: "/custom-hooks/use-prev",
+      },
     ],
   },
 ];

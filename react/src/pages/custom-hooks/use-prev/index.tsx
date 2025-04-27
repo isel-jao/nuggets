@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { usePrev } from "@/hooks/use-prev";
 
-export default function DevPage() {
+export default function UsePrevPage() {
   const [count, setCount] = useState(0);
   const prevCount = usePrev(count);
 

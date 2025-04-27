@@ -1,8 +1,22 @@
-import useOnMount from "@/hooks/use-on-mount";
+import { useOnMount } from "@/hooks/use-on-mount";
+import { useEffect } from "react";
+import { toast } from "sonner";
+
 export default function UseOnMountPage() {
   useOnMount(() => {
-    console.log("useOnMount");
+    setTimeout(() => {
+      toast.info("useOnMount: This will only run once", {
+        position: "top-right",
+      });
+    }, 1000);
   });
+
+  useEffect(() => {
+    // toast.info("useEffect: This will run twice in development mode");
+    setTimeout(() => {
+      toast.info("useEffect: This will run twice in development mode", {});
+    }, 1000);
+  }, []);
   return (
     <main className="container">
       <h1 className="font-bold">useOnMount</h1>
