@@ -156,5 +156,10 @@ select,
 }
 
 .container {
-  @apply mx-auto;
+  @apply mx-auto max-w-[1920px];
+}
+
+:disabled {
+  opacity: 0.5;
+  filter: grayscale(0.5);
 }

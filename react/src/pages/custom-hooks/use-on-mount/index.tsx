@@ -2,20 +2,38 @@ import { useOnMount } from "@/hooks/use-on-mount";
 import { useEffect } from "react";
 import { toast } from "sonner";
 
+const abortController = new AbortController();
+
 export default function UseOnMountPage() {
   useOnMount(() => {
-    setTimeout(() => {
-      toast.info("useOnMount: This will only run once", {
-        position: "top-right",
-      });
-    }, 1000);
+    setTimeout(
+      () => {
+        toast.info("useOnMount: This will only run once", {
+          position: "top-right",
+        });
+      },
+      1000,
+      abortController.signal,
+    );
+    return () => {
+      toast.dismiss();
+      abortController.abort();
+    };
   });
 
   useEffect(() => {
     // toast.info("useEffect: This will run twice in development mode");
-    setTimeout(() => {
-      toast.info("useEffect: This will run twice in development mode", {});
-    }, 1000);
+    setTimeout(
+      () => {
+        toast.info("useEffect: This will run twice in development mode", {});
+      },
+      1000,
+      abortController.signal,
+    );
+    return () => {
+      toast.dismiss();
+      abortController.abort();
+    };
   }, []);
   return (
     <main className="container">

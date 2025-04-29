@@ -14,36 +14,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { Link } from "react-router";
-
-type SidebarGroup = {
-  title: string;
-  url?: string;
-  items: {
-    title: string;
-    url: string;
-    isActive?: boolean;
-  }[];
-};
-
-const links: SidebarGroup[] = [
-  {
-    title: "React Hooks",
-    items: [],
-  },
-  {
-    title: "Custom Hooks",
-    items: [
-      {
-        title: "useOnMount",
-        url: "/custom-hooks/use-on-mount",
-      },
-      {
-        title: "usePrev",
-        url: "/custom-hooks/use-prev",
-      },
-    ],
-  },
-];
+import { links } from "./data";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -52,23 +23,36 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <span className="my-4 font-extrabold uppercase">logo</span>
         <SearchForm />
       </SidebarHeader>
-      <SidebarContent>
-        {links.map((item) => (
-          <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
-                      <Link to={item.url}>{item.title}</Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+      <SidebarContent className="py-4">
+        {links.map((item) => {
+          if (item.url)
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton asChild isActive={false}>
+                  <Link to={item.url}>{item.title}</Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+
+          if (item.items?.length)
+            return (
+              <SidebarGroup key={item.title}>
+                <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {item.items.map((item) => (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton asChild isActive={item.isActive}>
+                          <Link to={item.url}>{item.title}</Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            );
+          return null;
+        })}
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
