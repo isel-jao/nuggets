@@ -63,13 +63,14 @@ export function SideBar({ className, ...props }: SideBarProps) {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      {filteredLinks.map((item) => {
+      {filteredLinks.map((item, index) => {
         if (item.items?.length)
           return (
-            <div className="flex flex-col">
+            <div key={`item-${index}`} className="flex flex-col">
               <span>{item.title}</span>
-              {item.items.map((item) => (
+              {item.items.map((item, index) => (
                 <Link
+                  key={`sub-item-${index}`}
                   to={item.url}
                   className="hover:bg-accent hover:text-accent-foreground flex items-center gap-2 rounded-md p-2"
                 >
@@ -81,6 +82,7 @@ export function SideBar({ className, ...props }: SideBarProps) {
         if (item.url)
           return (
             <Link
+              key={`item-${index}`}
               to={item.url}
               className="hover:bg-accent hover:text-accent-foreground flex items-center gap-2 rounded-md p-2"
             >
@@ -98,12 +100,12 @@ export default function Page() {
     <>
       <main
         className={cn(
-          "[--sidebar-width:14rem] [--up-bar-height:4rem]",
-          "[&>*:nth-child(3)]:p-6 [&>*:nth-child(3)]:pt-[calc(var(--up-bar-height)+1rem)] [&>*:nth-child(3)]:pl-[calc(var(--sidebar-width)+1rem)]",
+          "[--sidebar-width:14rem] [--up-bar-height:3rem]",
+          "[&>*:nth-child(3)]:pt-[calc(var(--up-bar-height))] [&>*:nth-child(3)]:pl-[calc(var(--sidebar-width))]",
         )}
       >
         <SideBar className="z-10" />
-        <div className="fixed top-0 right-0 z-10 flex h-[var(--up-bar-height)] w-[calc(100%-var(--sidebar-width))] items-center border-b px-4">
+        <div className="bg-card/50 fixed top-0 right-0 z-10 flex h-[var(--up-bar-height)] w-[calc(100%-var(--sidebar-width))] items-center border-b px-4 backdrop-blur">
           <div className="flex items-center gap-2">
             <span>{link?.title}</span>
             {subLink && (
@@ -114,7 +116,9 @@ export default function Page() {
             )}
           </div>
         </div>
-        <Outlet />
+        <main>
+          <Outlet />
+        </main>
       </main>
       <Toaster />
     </>

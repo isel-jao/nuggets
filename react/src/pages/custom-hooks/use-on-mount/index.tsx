@@ -36,7 +36,7 @@ export default function UseOnMountPage() {
     };
   }, []);
   return (
-    <main className="container">
+    <main className="container p-4">
       <h1 className="font-bold">useOnMount</h1>
       <p>
         A custom React hook that runs a callback function only once when a

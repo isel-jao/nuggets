@@ -7,7 +7,7 @@ export default function UsePrevPage() {
   const prevCount = usePrev(count);
 
   return (
-    <main className="container flex flex-col gap-2">
+    <main className="container flex flex-col gap-2 p-4">
       <h1 className="font-bold">usePrev</h1>
       <p>
         A custom React hook that returns the previous value of a state whenever

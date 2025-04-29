@@ -9,6 +9,13 @@ const NotFoundPage = lazy(() => import("../not-found"));
 const DevPage = lazy(() => import("../dev"));
 const UserOnMountPage = lazy(() => import("../custom-hooks/use-on-mount"));
 const UsePrevPage = lazy(() => import("../custom-hooks/use-prev"));
+const UseDeferredValuePage = lazy(
+  () => import("../react-hooks/use-deferred-value"),
+);
+
+const UseImperativeHandlePage = lazy(
+  () => import("../react-hooks/use-imperative-handle"),
+);
 
 export default function Router() {
   return (
@@ -17,6 +24,16 @@ export default function Router() {
         <Routes>
           <Route element={<GlobalLayout />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/react-hooks">
+              <Route
+                path="use-deferred-value"
+                element={<UseDeferredValuePage />}
+              />
+              <Route
+                path="use-imperative-handle"
+                element={<UseImperativeHandlePage />}
+              />
+            </Route>
             <Route path="/custom-hooks">
               <Route path="use-on-mount" element={<UserOnMountPage />} />
               <Route path="use-prev" element={<UsePrevPage />} />

@@ -11,7 +11,16 @@ type SidebarGroup = {
 export const links: SidebarGroup[] = [
   {
     title: "React Hooks",
-    items: [],
+    items: [
+      {
+        title: "useDeferredValue",
+        url: "/react-hooks/use-deferred-value",
+      },
+      {
+        title: "useImperativeHandle",
+        url: "/react-hooks/use-imperative-handle",
+      },
+    ],
   },
   {
     title: "Custom Hooks",
