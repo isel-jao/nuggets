@@ -17,6 +17,8 @@ const UseImperativeHandlePage = lazy(
   () => import("../react-hooks/use-imperative-handle"),
 );
 
+const UseTransitionPage = lazy(() => import("../react-hooks/use-transition"));
+
 export default function Router() {
   return (
     <BrowserRouter>
@@ -34,6 +36,10 @@ export default function Router() {
                 element={<UseImperativeHandlePage />}
               />
             </Route>
+            <Route
+              path="/react-hooks/use-transition"
+              element={<UseTransitionPage />}
+            />
             <Route path="/custom-hooks">
               <Route path="use-on-mount" element={<UserOnMountPage />} />
               <Route path="use-prev" element={<UsePrevPage />} />

@@ -20,6 +20,10 @@ export const links: SidebarGroup[] = [
         title: "useImperativeHandle",
         url: "/react-hooks/use-imperative-handle",
       },
+      {
+        title: "useTransition",
+        url: "/react-hooks/use-transition",
+      },
     ],
   },
   {

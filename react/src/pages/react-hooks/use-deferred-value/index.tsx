@@ -8,12 +8,17 @@ interface SlowProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 function Slow({ className, children, style, color, ...props }: SlowProps) {
-  for (let i = 0; i < 5_000_000; i++) {
-    // Simulate a slow operation
+  const start = Date.now();
+  const end = start + 10;
+  while (Date.now() < end) {
+    // do nothing
   }
   return (
     <div
-      className={twMerge("size-8 shrink-0", className)}
+      className={twMerge(
+        "grid size-8 shrink-0 place-content-center font-semibold",
+        className,
+      )}
       style={{
         backgroundColor: color,
         ...style,
@@ -28,10 +33,11 @@ function Slow({ className, children, style, color, ...props }: SlowProps) {
 const MemoizedSlow = React.memo(Slow);
 
 export default function UseDeferredValuePage() {
-  const [color, setColor] = React.useState("red");
-  const defferdColor = useDeferredValue(color);
+  const [color, setColor] = React.useState("#ff4040");
+  const deferredColor = useDeferredValue(color);
   return (
     <main className="container flex flex-col gap-4 p-6">
+      <div>{color}</div>
       <Input
         type="color"
         value={color}
@@ -39,7 +45,7 @@ export default function UseDeferredValuePage() {
       />
       <div className="flex flex-wrap gap-2">
         {Array.from({ length: 10 }, (_, i) => (
-          <MemoizedSlow key={i} color={defferdColor}>
+          <MemoizedSlow key={i} color={deferredColor}>
             {i}
           </MemoizedSlow>
         ))}
