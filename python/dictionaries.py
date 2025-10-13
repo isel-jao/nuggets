@@ -1,6 +1,6 @@
-# # ============================================
-# # Creating Dictionaries
-# # ============================================
+# ============================================
+# Creating Dictionaries
+# ============================================
 # Using curly braces
 dict1 = {"a": 1, "b": 2, "c": 3}
 
@@ -19,9 +19,9 @@ keys = ["name", "age", "city"]
 values = ["Alice", 30, "Boston"]
 person = {k: v for k, v in zip(keys, values)}
 
-# # ============================================
-# # Accessing Values
-# # ============================================
+# ============================================
+# Accessing Values
+# ============================================
 person = {"name": "Alice", "age": 30}
 print(person["name"])  # Output: Alice
 
@@ -30,9 +30,9 @@ print(person.get("age"))  # Output: 30
 print(person.get("job"))  # Output: None
 print(person.get("job", "Unknown"))  # Output: Unknown (default value)
 
-# # ============================================
-# # Adding and Modifying Items
-# # ============================================
+# ============================================
+# Adding and Modifying Items
+# ============================================
 person = {"name": "Alice"}
 
 # Add a new key-value pair
@@ -46,9 +46,9 @@ person.update({"city": "Boston", "job": "Engineer"})
 
 print(person)  # Output: {'name': 'Alicia', 'age': 30, 'city': 'Boston', 'job': 'Engineer'}
 
-# # ============================================
-# # Removing Items
-# # ============================================
+# ============================================
+# Removing Items
+# ============================================
 person = {"name": "Alice", "age": 30, "city": "Boston"}
 
 # Remove using del
@@ -64,9 +64,9 @@ person.popitem()
 # Using clear() - removes all items
 person.clear()
 
-# # ============================================
-# # Iterating Through Dictionaries
-# # ============================================
+# ============================================
+# Iterating Through Dictionaries
+# ============================================
 person = {"name": "Alice", "age": 30, "city": "Boston"}
 
 # Iterate through keys
@@ -85,9 +85,9 @@ for value in person.values():
 for key, value in person.items():
     print(f"{key}: {value}")
     
-# # ============================================
-# # Dictionary Methods
-# # ============================================
+# ============================================
+# Dictionary Methods
+# ============================================
 
 person = {"name": "Alice", "age": 30}
 
@@ -100,9 +100,9 @@ person_copy = person.copy()
 # fromkeys() - creates a dictionary with specified keys and default value
 new_dict = dict.fromkeys(["a", "b", "c"], 0)  # {'a': 0, 'b': 0, 'c': 0}
 
-# # ============================================
-# # Checking for Keys
-# # ============================================
+# ============================================
+# Checking for Keys
+# ============================================
 person = {"name": "Alice", "age": 30}
 
 # Check if key exists
@@ -113,9 +113,9 @@ if "name" in person:
 if "job" not in person:
     print("Job doesn't exist")
     
-# # ============================================
-# # Dictionary Comprehension
-# # ============================================
+# ============================================
+# Dictionary Comprehension
+# ============================================
 
 # {key_expression: value_expression for item in iterable}
 # {key_expression: value_expression for item in iterable if condition}
@@ -132,9 +132,9 @@ numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 filtered = {x: x**2 for x in numbers if x % 3 == 0}
 # Output: {3: 9, 6: 36, 9: 81}
 
-# # ============================================
-# # Grouping and Aggregation
-# # ============================================
+# ============================================
+# Grouping and Aggregation
+# ============================================
 # Group by category
 items = [
     {"category": "fruit", "name": "apple"},
