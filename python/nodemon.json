@@ -1,0 +1,4 @@
+{
+  "ext": "py",
+  "exec": "clear && python3 main.py"
+}
