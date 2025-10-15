@@ -111,8 +111,38 @@ def mixed_function(*args: int, **kwargs: str) -> None:
     print("Keyword arguments:", kwargs)
     
 mixed_function(1, 2, 3, name="Issam", age="30")
-        
-        
+
+# ============================================
+# Lambda functions
+# ============================================
+# lambda arguments: expression
+
+add = lambda x, y: x + y
+print(add(2, 3))  # 5
+
+# Lambda with no arguments
+greet = lambda: "Hello!"
+print(greet())  # Output: Hello!
+
+# With map()
+numbers = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x ** 2, numbers))
+print(squared)  # [1, 4, 9, 16, 25]
+
+# With filter()
+numbers = [1, 2, 3, 4, 5, 6, 7, 8]
+evens = list(filter(lambda x: x % 2 == 0, numbers))
+print(evens)  # [2, 4, 6, 8]
+
+# Limitations
+# bad_lambda = lambda x: print(x)  # Error in some contexts
+
+# Can't do multiple operations
+# bad_lambda = lambda x: 
+#     y = x * 2
+#     return y + 1
+
+ 
 # ============================================
 # optional parameters gotcha
 # ============================================
@@ -154,3 +184,4 @@ def append_to_list_fixed(value: int, lst: list[int] = None) -> list[int]:
 l3 = append_to_list_fixed(1)
 l4 = append_to_list_fixed(2)
 print({"l3": l3, "l4":   l4})  # l3 will be [1] and l4 will be [2] 
+
