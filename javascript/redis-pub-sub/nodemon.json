@@ -1,0 +1,6 @@
+{
+  "ext": "ts",
+  "ignore": ["node_modules/**", "dist/**"],
+  "exec": "clear && tsx src/main.ts",
+  "watch": ["src/"]
+}
