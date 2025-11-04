@@ -1,16 +1,17 @@
-import { parentPort } from "node:worker_threads";
+import { parentPort, workerData } from "node:worker_threads";
 
-let peerPort = null;
+const { peerPort } = workerData;
 
 parentPort.on("message", (msg) => {
-  if (msg.type === "connect") {
-    peerPort = msg.port;
-
-    peerPort.on("message", (data) => {
-      console.log("Worker B received from peer:", data);
-
-      // Reply back
-      peerPort.postMessage("Hello back from Worker B!");
-    });
+  const { type, data } = msg;
+  if (type === "ping") {
+    peerPort.postMessage("Hello from Worker B!");
   }
+  if (type == "task") {
+    parentPort.postMessage({ type: "result", data: data + 1 });
+  }
+});
+
+peerPort.on("message", (data) => {
+  console.log("Worker B received from peer:", data);
 });
