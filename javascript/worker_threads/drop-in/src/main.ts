@@ -1,6 +1,8 @@
-import { createEngine } from "./createEngine";
+import { createEngine } from "./createEngine.js";
 
-const engine = createEngine();
+const engine = createEngine({
+  multiThreaded: process.env.MULTI_THREADED === "true",
+});
 
 async function main() {
   await engine.start();

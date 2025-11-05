@@ -15,11 +15,6 @@ export class Engine implements IEngine {
     this.status = "stopped";
   }
 
-  async restart(): Promise<void> {
-    await this.stop();
-    await this.start();
-  }
-
   async getStatus(): Promise<string> {
     return this.status;
   }
