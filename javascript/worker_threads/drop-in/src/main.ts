@@ -5,12 +5,12 @@ const engine = createEngine({
 });
 
 async function main() {
-  await engine.start();
-  const result = await engine.doWork("Sample Task");
-  console.log("Work Result:", result);
-  const status = await engine.getStatus();
-  console.log("Engine Status:", status);
-  await engine.stop();
+  const result = await Promise.all(
+    Array.from({ length: 3 }, (_, i) => i + 1).map((i) =>
+      engine.doSomething1(`Task ${i}`)
+    )
+  );
+  console.log("All tasks completed", { result });
 }
 
 main().catch((err) => {

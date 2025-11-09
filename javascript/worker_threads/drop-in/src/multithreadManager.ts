@@ -37,11 +37,9 @@ parentPort.on('message', async (message) => {
 `;
 export class MultithreadManager implements IEngine {
   private workersInfo: Map<number, WorkerInfo>;
-  private status: string;
 
   constructor(options?: MultithreadManagerOptions) {
     const { size = Math.max(1, cpus().length - 1) } = options || {};
-    this.status = "stopped";
     this.workersInfo = new Map();
 
     for (let i = 0; i < size; i++) {
@@ -79,19 +77,13 @@ export class MultithreadManager implements IEngine {
     });
   }
 
-  doWork(task: string): Promise<string> {
-    return this.dispatchTask("doWork", task) as Promise<string>;
+  doSomething1(task: string): Promise<string> {
+    return this.dispatchTask("doSomething1", task) as Promise<string>;
   }
-
-  start(): Promise<void> {
-    return this.dispatchTask("start") as Promise<void>;
+  doSomething2(task: string): Promise<string> {
+    return this.dispatchTask("doSomething2", task) as Promise<string>;
   }
-
-  stop(): Promise<void> {
-    return this.dispatchTask("stop") as Promise<void>;
-  }
-
-  getStatus(): Promise<string> {
-    return this.dispatchTask("getStatus") as Promise<string>;
+  doSomething3(task: string): Promise<number> {
+    return this.dispatchTask("doSomething3", task) as Promise<number>;
   }
 }

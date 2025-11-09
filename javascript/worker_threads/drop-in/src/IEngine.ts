@@ -1,8 +1,5 @@
-import { P } from "pino";
-
 export interface IEngine {
-  start(): Promise<void>;
-  stop(): Promise<void>;
-  getStatus(): Promise<string>;
-  doWork(task: string): Promise<string>;
+  doSomething1(task: string): Promise<string>;
+  doSomething2(task: string): Promise<string>;
+  doSomething3(task: string): Promise<number>;
 }

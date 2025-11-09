@@ -7,7 +7,9 @@ type CrateEngineOptions = {
 };
 export function createEngine(options?: CrateEngineOptions): IEngine {
   if (options?.multiThreaded) {
+    console.log("Creating Multithreaded Engine");
     return new MultithreadManager();
   }
+  console.log("Creating Single-threaded Engine");
   return new Engine();
 }

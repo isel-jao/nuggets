@@ -1,26 +1,20 @@
 import { IEngine } from "./IEngine.js";
 
 export class Engine implements IEngine {
-  private status: string;
-  constructor() {
-    this.status = "stopped";
+  async doSomething1(task: string): Promise<string> {
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
+    const now = Date.now();
+    while (Date.now() - now < 5_000) {
+      // Busy wait for 2 seconds
+    }
+    return `Completed something 1 with task: ${task}`;
   }
-  async start(): Promise<void> {
+  async doSomething2(task: string): Promise<string> {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    return `Completed something 2 with task: ${task}`;
+  }
+  async doSomething3(task: string): Promise<number> {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    this.status = "running";
-  }
-
-  async stop(): Promise<void> {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    this.status = "stopped";
-  }
-
-  async getStatus(): Promise<string> {
-    return this.status;
-  }
-
-  async doWork(task: string): Promise<string> {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    return `Completed task: ${task}`;
+    return task.length;
   }
 }
