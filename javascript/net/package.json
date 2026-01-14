@@ -1,0 +1,19 @@
+{
+  "name": "net",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "pnpm tsx --watch src/server.ts",
+    "dev:client": "pnpm tsx --watch src/client.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.25.0",
+  "devDependencies": {
+    "@types/node": "^25.0.7",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
