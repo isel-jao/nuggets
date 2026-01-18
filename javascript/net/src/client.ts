@@ -1,12 +1,5 @@
 import { Socket, createConnection } from "node:net";
-import {
-  SERVER_HOST,
-  SERVER_PORT,
-  HANDSHAKE_TIMEOUT_MS,
-  RETRY_INTERVAL_MS,
-  MAX_RETRIES,
-  MESSAGE_ENCODING,
-} from "./constants";
+import { SERVER_HOST, SERVER_PORT, MESSAGE_ENCODING } from "./constants";
 import { randomUUID } from "node:crypto";
 import { THandshakeResponse, THandshakeMessage } from "./types";
 
@@ -27,7 +20,7 @@ type TSubscriptionCallback = (data: string) => void | Promise<void>;
 
 type TCPClientOptions = TCPHostConfig & TCPClientConfig;
 
-class TCPClient {
+export class TCPClient {
   private socket: Socket | null;
   private subscriptions: Map<string, TSubscriptionCallback>;
 
@@ -147,47 +140,10 @@ class TCPClient {
       this.subscriptions.delete(id);
       this.socket?.off("data", callback as (...args: unknown[]) => void);
     };
-    return unsubscribe;
+    return { unsubscribe };
   }
 
   public emit(data: string): void {
     this.socket?.write(data, this.messageEncoding);
   }
 }
-
-async function main() {
-  const client = new TCPClient({
-    port: SERVER_PORT,
-    host: SERVER_HOST,
-    messageEncoding: MESSAGE_ENCODING,
-    handshake: {
-      type: "worker",
-      config: { exampleKey: 10 },
-    },
-  });
-
-  await client.connect();
-
-  client.subscribe((data) => {
-    console.log("Received data:", data);
-  });
-
-  // Example usage of multiple subscriptions
-  const subscription1 = client.subscribe((data) => {
-    console.log("Subscription 1 received data:", data);
-  });
-  const subscription2 = client.subscribe((data) => {
-    console.log("Subscription 2 received data:", data);
-  });
-  // Emit data to server every 2 seconds
-  setInterval(() => {
-    const message = `Hello server! Time is ${new Date().toISOString()}`;
-    console.log("Sending message to server:", message);
-    client.emit(message);
-  }, 2_000);
-}
-
-main().catch((error) => {
-  console.error("Error in client:", error);
-  process.exit(1);
-});

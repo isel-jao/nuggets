@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:server": "pnpm tsx --watch src/server.ts",
-    "dev:client": "pnpm tsx --watch src/client.ts"
+    "dev:server": "pnpm tsx --watch src/server-demo.ts",
+    "dev:client": "pnpm tsx --watch src/client-demo.ts"
   },
   "keywords": [],
   "author": "",

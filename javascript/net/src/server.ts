@@ -1,36 +1,42 @@
 import { createServer, Server, Socket } from "node:net";
-import { SERVER_HOST, SERVER_PORT, MESSAGE_ENCODING } from "./constants";
-import { THandshakeMessage, THandshakeResponse } from "./types";
-
-type TClientHandlers = {
-  validateConfig: (config: Record<string, unknown>) => boolean;
-  onRegister: (socket: Socket, config: Record<string, unknown>) => void;
-};
+import {
+  Logger,
+  TClientHandlers,
+  THandshakeMessage,
+  THandshakeResponse,
+} from "./types";
 
 type TCPServerOptions = {
   port: number;
   messageEncoding?: BufferEncoding;
+  logger?: Logger;
 };
 
-class TCPServer {
+export class TCPServer {
   private _server: Server;
   private _clientTypes: Map<string, TClientHandlers>;
   private port: number;
   private messageEncoding: BufferEncoding;
+  logger: Logger;
 
   constructor(options: TCPServerOptions) {
+    this.logger = options.logger ?? console;
     this.port = options.port;
     this.messageEncoding = options.messageEncoding ?? "utf-8";
     this._clientTypes = new Map();
     this._server = createServer((socket) => {
-      console.log("Client connected:", socket.remoteAddress, socket.remotePort);
+      this.logger.debug(
+        `Client connected: ${socket.remoteAddress}, ${socket.remotePort}`
+      );
 
       socket.once("data", (data) => {
         try {
           const messageStr = data.toString(this.messageEncoding);
-          console.log("Received data:", messageStr);
+          this.logger.debug(`Received data: ${messageStr}`);
           const handshakeMessage: THandshakeMessage = JSON.parse(messageStr);
-          console.log("Received handshake message:", handshakeMessage);
+          this.logger.debug(
+            `Received handshake message: ${JSON.stringify(handshakeMessage)}`
+          );
           const type = handshakeMessage.type;
           const clientType = this._clientTypes.get(type);
           if (!clientType) {
@@ -39,7 +45,7 @@ class TCPServer {
               reason: `Unknown client type: ${type}`,
             };
             socket.write(JSON.stringify(response), this.messageEncoding);
-            console.log("Handshake rejected: Unknown client type");
+            this.logger.debug("Handshake rejected: Unknown client type");
             socket.end();
             return;
           }
@@ -50,13 +56,13 @@ class TCPServer {
               reason: "Invalid configuration",
             };
             socket.write(JSON.stringify(response), this.messageEncoding);
-            console.log("Handshake rejected: Invalid configuration");
+            this.logger.debug("Handshake rejected: Invalid configuration");
             socket.end();
             return;
           }
           const response: THandshakeResponse = { status: "accepted" };
           socket.write(JSON.stringify(response), this.messageEncoding);
-          console.log("Handshake accepted");
+          this.logger.debug("Handshake accepted");
           socket.removeAllListeners();
           clientType.onRegister(socket, handshakeMessage.config);
         } catch (error) {
@@ -66,7 +72,7 @@ class TCPServer {
             reason: "Invalid handshake message format",
           };
           socket.write(JSON.stringify(response), this.messageEncoding);
-          console.log("Handshake rejected: Invalid message format");
+          this.logger.debug("Handshake rejected: Invalid message format");
           socket.end();
         }
       });
@@ -79,49 +85,20 @@ class TCPServer {
 
   public async start(): Promise<void> {
     this._server.listen(this.port, () => {
-      console.log(`Server listening on port ${this.port}`);
+      this.logger.debug(`Server listening on port ${this.port}`);
     });
   }
-  public async shutdown(): Promise<void> {}
+  public async shutdown(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this._server.close((err) => {
+        if (err) {
+          this.logger.error(`Error shutting down server: ${err.message}`);
+          reject(err);
+        } else {
+          this.logger.debug("Server shut down successfully");
+          resolve();
+        }
+      });
+    });
+  }
 }
-
-const workers: Set<Socket> = new Set();
-
-async function main() {
-  const server = new TCPServer({
-    port: SERVER_PORT,
-    messageEncoding: MESSAGE_ENCODING,
-  });
-
-  server.registerClientType("worker", {
-    validateConfig: (config) => {
-      // Example validation: check for required keys
-      return typeof config["exampleKey"] === "string";
-    },
-    onRegister: (socket, config) => {
-      console.log("Worker client registered with config:", config);
-      // Additional setup for worker clients can be done here
-      workers.add(socket);
-      socket.on("data", (data) => {
-        console.log("Data from worker:", data.toString(MESSAGE_ENCODING));
-        // echo back the data to the worker
-        socket.write(data, MESSAGE_ENCODING);
-      }); // Handle incoming data from worker
-
-      socket.on("close", () => {
-        workers.delete(socket);
-        console.log("Worker disconnected");
-      }); // Handle worker disconnection
-      socket.on("error", (error) => {
-        console.error("Worker socket error:", error);
-        workers.delete(socket);
-      }); // Handle worker errors
-    },
-  });
-  await server.start();
-}
-
-main().catch((error) => {
-  console.error("Error in server:", error);
-  process.exit(1);
-});
