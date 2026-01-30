@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <input type="radio" name="theme" value="device" id="device" checked />
+      <label for="device">Device</label>
+
+      <input type="radio" name="theme" value="dark" id="dark" />
+      <label for="dark">Dark</label>
+
+      <input type="radio" name="theme" value="light" id="light" />
+      <label for="light">Light</label>
+
+      <br />
+      <br />
+      <br />
+
+      <div class="card">
+        <h3 class="title">Hello, World!</h3>
+        <div class="content">
+          <p>This is a sample card component.</p>
+        </div>
+      </div>
+    </main>
+    <script>
+      const localStorageTheme = localStorage.getItem("theme");
+      if (["light", "dark", "device"].includes(localStorageTheme)) {
+        const radios = document.querySelectorAll('input[name="theme"]');
+        radios.forEach((radio) => {
+          if (radio.value === localStorageTheme) {
+            radio.checked = true;
+          }
+          radio.addEventListener("change", (e) => {
+            console.log(e.target.value);
+            localStorage.setItem("theme", e.target.value);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

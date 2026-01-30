@@ -1,0 +1,88 @@
+.debug {
+    border: 1px solid red !important;
+
+    &>* {
+        border: 1px solid green !important;
+    }
+
+    &>* {
+        border: 1px solid blue !important;
+    }
+}
+
+@layer base {
+
+    :root,
+    main,
+    body {
+        height: 100%;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+}
+
+:root {
+    --color-bg: light-dark(#f4f4f5, #09090b);
+    --color-foreground: light-dark(#18181b, #fafafa);
+
+    --color-card-bg: light-dark(#fafafa, #18181b);
+    --color-card-foreground: light-dark(#09090b, #f4f4f5);
+
+    :has(input[name="theme"][value="dark"]:checked) {
+        color-scheme: dark;
+    }
+
+    :has(input[name="theme"][value="light"]:checked) {
+        color-scheme: light;
+    }
+
+    :has(input[name="theme"][value="device"]:checked) {
+        color-scheme: light dark;
+    }
+
+}
+
+body {
+    color: var(--color-foreground);
+    background-color: var(--color-bg);
+
+    font-family: monospace;
+}
+
+
+
+.container {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.card {
+    color: var(--color-card-foreground);
+    background-color: var(--color-card-bg);
+
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+
+    padding: 1.5rem;
+    border-radius: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &>.title {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    &>.content {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+}
