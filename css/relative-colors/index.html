@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>CSS Nuggets - Relative colors</title>
+  </head>
+  <body>
+    <main class="container">
+      <h3 class="title">relative colors</h3>
+      <br />
+      <label for="colorPicker"> Pick a primary color: </label>
+      <input type="color" id="colorPicker" />
+      <br />
+      <br />
+      <button class="btn primary">Primary</button>
+      <button class="btn primary-light">Primary light</button>
+      <button class="btn primary-dark">Primary dark</button>
+      <button class="btn primary-complementary">Primary complementary</button>
+    </main>
+    <script>
+      const colorPicker = document.getElementById("colorPicker");
+      const initialColor = getComputedStyle(document.documentElement)
+        .getPropertyValue("--color-primary")
+        .trim();
+      colorPicker.value = initialColor;
+      colorPicker.addEventListener("input", (event) => {
+        const color = event.target.value;
+        document.documentElement.style.setProperty("--color-primary", color);
+      });
+    </script>
+  </body>
+</html>

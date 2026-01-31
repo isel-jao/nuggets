@@ -1,0 +1,95 @@
+.debug {
+    border: 1px solid red !important;
+
+    &>* {
+        border: 1px solid green !important;
+    }
+
+    &>* {
+        border: 1px solid blue !important;
+    }
+}
+
+@layer base {
+
+    :root,
+    main,
+    body {
+        height: 100%;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    button {
+        all: unset;
+    }
+}
+
+:root {
+    --color-bg: #09090b;
+    --color-foreground: #fafafa;
+
+    --color-card-bg: #18181b;
+    --color-card-foreground: #f4f4f5;
+
+    --color-primary: #f16390;
+    --color-primary-foreground: #000000;
+
+    color-scheme: light dark;
+
+}
+
+body {
+    color: var(--color-foreground);
+    background-color: var(--color-bg);
+
+    font-family: monospace;
+}
+
+.container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+button.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 600;
+
+
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: scale(1.05) rotate(-1deg);
+    }
+
+    &:active {
+        transform: scale(0.95) rotate(1deg);
+    }
+
+    &.primary {
+        background-color: var(--color-primary);
+        color: var(--color-primary-foreground);
+    }
+
+    &.primary-light {
+        background-color: oklch(from var(--color-primary) min(1, calc(l + 0.2)) calc(c * 0.95) h);
+        color: var(--color-bg);
+    }
+
+    &.primary-dark {
+        background-color: oklch(from var(--color-primary) max(0, calc(l - 0.2)) calc(c * 0.95) h);
+        color: var(--color-foreground);
+    }
+
+    &.primary-complementary {
+        background-color: hsl(from var(--color-primary) calc(h - 180) s l);
+        color: var(--color-primary-foreground);
+    }
+}
