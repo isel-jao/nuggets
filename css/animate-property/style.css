@@ -1,0 +1,106 @@
+.debug {
+    border: 1px solid red !important;
+
+    &>* {
+        border: 1px solid green !important;
+    }
+
+    &>* {
+        border: 1px solid blue !important;
+    }
+}
+
+@layer base {
+
+    :root,
+    main,
+    body {
+        height: 100%;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+}
+
+:root {
+    --color-bg: light-dark(#f4f4f5, #09090b);
+    --color-foreground: light-dark(#18181b, #fafafa);
+
+    --color-card-bg: light-dark(#fafafa, #18181b);
+    --color-card-foreground: light-dark(#09090b, #f4f4f5);
+
+    --color-primary: light-dark(#4f46e5, #6366f1);
+    --color-primary-foreground: light-dark(#ffffff, #000000);
+
+    color-scheme: light dark;
+
+}
+
+body {
+    color: var(--color-foreground);
+    background-color: var(--color-bg);
+
+    font-family: monospace;
+}
+
+@property --degree {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+}
+
+.card {
+
+    width: clamp(200px, 50vw, 400px);
+    aspect-ratio: 4/3;
+    margin: 1rem auto;
+    overflow: hidden;
+
+    --border-radius: 1rem;
+    --border-width: 2px;
+    border-radius: var(--border-radius);
+
+
+    position: relative;
+
+    &::after,
+    &::before {
+        content: '';
+        position: absolute;
+    }
+
+    &::before {
+        inset: 0;
+        border-radius: var(--border-radius);
+
+        background-image: conic-gradient(from var(--degree),
+                var(--color-primary),
+                transparent 12.5% 37.6%,
+                hsl(from var(--color-primary) calc(h + 180) s l), transparent 62.5% 87.5%,
+                var(--color-primary));
+        animation: rotate-degree 3s linear infinite;
+    }
+
+    &::after {
+        background-color: var(--color-card-bg);
+        inset: var(--border-width);
+        border-radius: calc(var(--border-radius) - var(--border-width));
+    }
+
+
+}
+
+@keyframes rotate-degree {
+    from {
+        --degree: 0deg;
+    }
+
+    to {
+        --degree: 360deg;
+    }
+
+}
