@@ -1,0 +1,95 @@
+.debug {
+    border: 1px solid red !important;
+
+    &>* {
+        border: 1px solid green !important;
+    }
+
+    &>* {
+        border: 1px solid blue !important;
+    }
+}
+
+@layer base {
+
+    :root,
+    main,
+    body {
+        height: 100%;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+}
+
+:root {
+    --color-bg: light-dark(#f4f4f5, #09090b);
+    --color-foreground: light-dark(#18181b, #fafafa);
+
+    --color-card-bg: light-dark(#fafafa, #18181b);
+    --color-card-foreground: light-dark(#09090b, #f4f4f5);
+
+    --color-primary: light-dark(#4f46e5, #6366f1);
+    --color-primary-foreground: light-dark(#ffffff, #000000);
+
+    color-scheme: light dark;
+
+}
+
+body {
+    color: var(--color-foreground);
+    background-color: var(--color-bg);
+
+    font-family: monospace;
+}
+
+.card {
+    margin: 2rem auto;
+    background-color: var(--color-card-bg);
+    border-radius: 1rem;
+    padding: 1rem;
+    width: min(calc(100vw - 2rem), 40rem);
+
+    container-name: card-container;
+    container-type: inline-size;
+
+    &>.content {
+
+
+        display: flex;
+        gap: 1rem;
+
+
+
+        &>* {
+            flex: 1;
+            position: relative;
+        }
+
+
+
+        & img {
+            width: 100%;
+            height: 100%;
+            border-radius: 0.5rem;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+
+    @container card-container (max-width: 460px) {
+        .content {
+            flex-direction: column;
+
+            & img {
+                max-height: 12rem;
+
+            }
+        }
+
+    }
+}
