@@ -47,12 +47,24 @@ body {
     font-family: monospace;
 }
 
+main {
+    display: flex;
+    gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+    padding: 2rem;
+    height: auto;
+
+    &>.card {
+        flex: 1;
+    }
+}
+
 .card {
-    margin: 2rem auto;
+    /* margin: 2rem auto; */
     background-color: var(--color-card-bg);
     border-radius: 1rem;
     padding: 1rem;
-    width: min(calc(100vw - 2rem), 40rem);
+    /* width: min(calc(100vw - 2rem), 30rem); */
 
     container-name: card-container;
     container-type: inline-size;
