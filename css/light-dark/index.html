@@ -35,15 +35,14 @@
       </div>
     </main>
     <script>
-      const localStorageTheme = localStorage.getItem("theme");
+      const localStorageTheme = localStorage.getItem("theme") || "device";
+      const radios = document.querySelectorAll('input[name="theme"]');
       if (["light", "dark", "device"].includes(localStorageTheme)) {
-        const radios = document.querySelectorAll('input[name="theme"]');
         radios.forEach((radio) => {
           if (radio.value === localStorageTheme) {
             radio.checked = true;
           }
           radio.addEventListener("change", (e) => {
-            console.log(e.target.value);
             localStorage.setItem("theme", e.target.value);
           });
         });
