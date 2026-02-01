@@ -92,9 +92,9 @@ button {
 }
 
 [popovertarget="popover"] {
-    position: absolute;
-    top: 45rem;
-    right: 2rem;
+    position: relative;
+    top: 2rem;
+    left: 2rem;
     anchor-name: --popover-anchor;
 }
 
@@ -144,4 +144,8 @@ button {
     inset: auto;
     bottom: anchor(top);
     right: anchor(right);
+}
+
+.h-screen {
+    height: 100vh;
 }
