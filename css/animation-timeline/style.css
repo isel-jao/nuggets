@@ -1,0 +1,81 @@
+@import "./base.css" layer(base);
+
+section {
+    height: 100vh;
+    align-content: center;
+    font-size: 3rem;
+    text-align: center;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+section:nth-child(1) {
+    background-color: light-dark(#f87171, #b91c1c);
+}
+
+section:nth-child(2) {
+    background-color: light-dark(#60a5fa, #1e40af);
+}
+
+section:nth-child(3) {
+    background-color: light-dark(#34d399, #064e3b);
+}
+
+
+:root {
+    scroll-timeline-name: --my-scroller;
+    scroll-timeline-axis: block;
+}
+
+.box {
+    background-color: var(--color-primary);
+    position: fixed;
+    width: 10rem;
+    border-radius: 2rem;
+    aspect-ratio: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.9;
+
+    animation-timing-function: linear;
+    animation-name: spin;
+    animation-timeline: --my-scroller;
+
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+
+#scroll-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1rem;
+    background-color: var(--color-primary);
+    transform-origin: left;
+    transform: scaleX(0);
+    animation-timing-function: linear;
+    animation-name: scale-x;
+    animation-timeline: --my-scroller;
+
+}
+
+@keyframes scale-x {
+    0% {
+        transform: scaleX(0);
+    }
+
+    100% {
+        transform: scaleX(1);
+    }
+}
