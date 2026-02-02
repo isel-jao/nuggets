@@ -1,0 +1,55 @@
+@import "./base.css" layer(base);
+
+
+main {
+    padding: 2rem;
+}
+
+.tabs {
+    --radius: 1rem;
+    display: inline-flex;
+    border: 1px solid rgb(from var(--color-foreground) r g b / 0.2);
+    border-radius: var(--radius);
+
+}
+
+.tab {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    position: relative;
+
+    &:nth-child(1) {
+        border-radius: var(--radius) 0 0 var(--radius);
+    }
+
+    &:nth-child(3) {
+        border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+}
+
+.tab:hover {
+    background-color: rgb(from var(--color-foreground) r g b / 0.05);
+}
+
+.tab-label {
+    position: relative;
+    z-index: 10;
+}
+
+.active-indicator {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-primary);
+    border-radius: inherit;
+    z-index: 0;
+    view-transition-name: tab-active-indicator;
+}
+
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-group(tab-active-indicator) {
+    transition: transform 300ms ease;
+}
