@@ -1,0 +1,123 @@
+.debug {
+    border: 1px solid red !important;
+
+    &>* {
+        border: 1px solid green !important;
+    }
+
+    &>* {
+        border: 1px solid blue !important;
+    }
+}
+
+@layer base {
+
+    :root,
+    main,
+    body {
+        height: 100%;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+}
+
+:root {
+    --color-bg: light-dark(#f4f4f5, #09090b);
+    --color-foreground: light-dark(#18181b, #fafafa);
+
+    --color-card-bg: light-dark(#fafafa, #18181b);
+    --color-card-foreground: light-dark(#09090b, #f4f4f5);
+
+    --color-primary: light-dark(#4f46e5, #6366f1);
+    --color-primary-foreground: light-dark(#ffffff, #000000);
+
+    color-scheme: light dark;
+
+}
+
+body {
+    color: var(--color-foreground);
+    background-color: var(--color-bg);
+
+    font-family: monospace;
+}
+
+button {
+    cursor: pointer;
+}
+
+.sidebar {
+    position: fixed;
+    background-color: var(--color-card-bg);
+
+    inset: 1rem;
+    padding: 1rem;
+    width: 16rem;
+
+    /* sidebar */
+    --r: 1rem;
+
+    /* open label */
+    --bh: 3rem;
+    --bw: 2rem;
+    --br: 0.5rem;
+
+    border-radius: var(--r);
+
+    &>#close {
+        top: 0.5rem;
+        right: 0.5rem;
+        height: 2rem;
+        width: 2rem;
+    }
+
+    &>#close,
+    &>#open {
+
+        cursor: pointer;
+        position: absolute;
+        display: inline-block;
+        align-content: center;
+        text-align: center;
+    }
+
+    &>#open {
+        border-radius: 0 var(--br) var(--br) 0;
+
+        bottom: 50%;
+        transform: translateY(50%);
+        left: 0;
+        height: var(--bh);
+        width: var(--bw);
+    }
+
+
+
+    transition-duration: 500ms;
+    transition-timing-function: ease-in-out;
+    transition-property: clip-path,
+    background-color;
+
+    clip-path: inset(0 0 0 0 round var(--r));
+
+    &:has(#toggle:checked) {
+        background-color: var(--color-primary);
+        clip-path: inset(calc(50% - calc(var(--bh) / 2)) calc(100% - var(--bw)) calc(50% - calc(var(--bh) / 2)) 0 round 0 var(--br) var(--br) 0);
+    }
+
+    &:has(#toggle:not(:checked))>#open {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    &>#toggle {
+        display: none;
+    }
+
+
+}

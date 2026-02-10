@@ -79,12 +79,12 @@ button.btn {
     }
 
     &.primary-light {
-        background-color: oklch(from var(--color-primary) min(1, calc(l + 0.2)) calc(c * 0.95) h);
-        color: var(--color-bg);
+        background-color: oklch(from var(--color-primary) min(1, calc(l + 0.2)) c h);
+        /* background-color: oklch(from var(--color-primary) l c h); */
     }
 
     &.primary-dark {
-        background-color: oklch(from var(--color-primary) max(0, calc(l - 0.2)) calc(c * 0.95) h);
+        background-color: oklch(from var(--color-primary) max(0, calc(l - 0.2)) c h);
         color: var(--color-foreground);
     }
 
