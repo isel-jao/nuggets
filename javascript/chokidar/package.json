@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/main.js"
+  },
+  "dependencies": {
+    "chokidar": "^5.0.0"
+  }
+}

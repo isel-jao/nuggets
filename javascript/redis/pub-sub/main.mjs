@@ -102,7 +102,7 @@ function MultipleChannelsExample() {
 // subscriber.punsubscribe();
 
 function main() {
-  // basicExample();
+  basicExample();
   // PatternMatchingExample();
   // MultipleChannelsExample();
 }
