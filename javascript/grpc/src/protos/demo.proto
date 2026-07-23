@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package demo;
+
+// =========================
+// Service Definition
+// =========================
+service DemoService {
+
+  // 1. Unary RPC
+  rpc GetUser(GetUserRequest) returns (UserResponse);
+
+  // 2. Server Streaming RPC
+  rpc ListUsers(ListUsersRequest) returns (stream UserResponse);
+
+  // 3. Client Streaming RPC
+  rpc UploadScores(stream Score) returns (UploadSummary);
+
+  // 4. Bidirectional Streaming RPC
+  rpc Chat(stream ChatMessage) returns (stream ChatMessage);
+}
+
+// =========================
+// Unary Messages
+// =========================
+
+message GetUserRequest {
+  int32 id = 1;
+}
+
+message UserResponse {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+// =========================
+// Server Streaming Messages
+// =========================
+
+message ListUsersRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+// Reuses UserResponse
+
+// =========================
+// Client Streaming Messages
+// =========================
+
+message Score {
+  string student = 1;
+  int32 value = 2;
+}
+
+message UploadSummary {
+  int32 total_scores = 1;
+  double average = 2;
+}
+
+// =========================
+// Bidirectional Streaming Messages
+// =========================
+
+message ChatMessage {
+  string sender = 1;
+  string message = 2;
+  int64 timestamp = 3;
+}
