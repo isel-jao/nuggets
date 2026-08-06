@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "build:host": "pnpm --filter host build",
+    "build:remote_app": "pnpm --filter remote_app build",
+    "build": "pnpm build:host && pnpm build:remote_app",
+    "dev:host": "pnpm --filter host dev --port 8088",
+    "preview:remote_app": "pnpm --filter remote_app preview --port 8089",
+    "dev": "concurrently \"pnpm dev:host\" \"pnpm preview:remote_app\""
+  },
+  "dependencies": {
+    "concurrently": "^10.0.4"
+  }
+}
