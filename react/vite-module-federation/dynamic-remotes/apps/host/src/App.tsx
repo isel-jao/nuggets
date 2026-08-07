@@ -1,40 +1,53 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { RemoteComponent } from "./components/remote-component";
 
 export default function App() {
-  const [active, setActive] = useState("button");
-  const ActiveComponent = useCallback(
-    () => (
-      <RemoteComponent
-        name={active}
-        entry="http://localhost:8089/remoteEntry.js"
-        onClick={() => alert("Button clicked!")}
-      >
-        {active === "button" ? "Click me!" : <p>Card content</p>}
-      </RemoteComponent>
-    ),
-    [active],
-  );
-
+  const [isCardLoaded, setIsCardLoaded] = useState(false);
+  function handleCardLoad() {
+    setIsCardLoaded(true);
+  }
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <div className="flex gap-2">
-        <button
-          className="bg-blue-500 text-white px-3 py-1.5 rounded"
-          onClick={() => setActive("button")}
+    <main className=" p-6 [&>h3]:mb-2 [&>h3]:text-lg [&>h3]:font-semibold [&>h3:not(:first-child)]:mt-4">
+      <h3>Remote Button</h3>
+      <RemoteComponent
+        entry="http://localhost:8089/remoteEntry.js"
+        name="button"
+        onClick={() => {
+          alert("clicked");
+        }}
+      >
+        click me
+      </RemoteComponent>
+      <h3>
+        Remote Card{" "}
+        {!isCardLoaded && (
+          <button
+            className="ml-2 rounded bg-foreground/10 hover:brightness-110  px-2 py-0.5 text-white"
+            onClick={handleCardLoad}
+          >
+            load card
+          </button>
+        )}
+      </h3>
+      {isCardLoaded && (
+        <RemoteComponent
+          entry="http://localhost:8089/remoteEntry.js"
+          name="card"
+          onLoad={handleCardLoad}
         >
-          Load Button
-        </button>
-        <button
-          className="bg-green-500 text-white px-3 py-1.5 rounded"
-          onClick={() => setActive("card")}
-        >
-          Load Card
-        </button>
-      </div>
-      <div className="mt-4">
-        <ActiveComponent />
-      </div>
-    </div>
+          <p>
+            This is a remote card component loaded from a different application.
+            It
+          </p>
+        </RemoteComponent>
+      )}
+      <h3>Invalid Entry</h3>
+      <RemoteComponent name="card" entry="invalid-entry.js" />
+      <h3>Invalid Name</h3>
+      <RemoteComponent
+        name="invalid-name"
+        entry="http://localhost:8089/remoteEntry.js"
+      />
+    </main>
   );
 }

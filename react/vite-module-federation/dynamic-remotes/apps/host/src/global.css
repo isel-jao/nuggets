@@ -28,7 +28,7 @@
     body {
         @apply bg-background text-foreground;
 
-        font-family: monospace;
+        font-family: "Inter", sans-serif;
     }
 
     .container {
