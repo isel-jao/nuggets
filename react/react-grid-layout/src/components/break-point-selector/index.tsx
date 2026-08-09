@@ -1,17 +1,24 @@
-import React from "react";
 import { twMerge } from "tailwind-merge";
-import { useStore } from "../../store";
-import { useShallow } from "zustand/shallow";
-import { breakPointsLabels, breakpointsList } from "../../constant";
+import { breakpointsList } from "../../grid-layout/constants";
+import { useGridLayoutContext } from "../../grid-layout/context";
+import type { Breakpoint } from "../../grid-layout/type";
 
+const breakPointsLabels: Record<Breakpoint, string> = {
+  "desktop-ultra-wide": "Ultra Wide",
+  "desktop-wide": "Wide",
+  desktop: "Desktop",
+  tablet: "Tablet",
+  mobile: "Mobile",
+};
 interface BreakPointSelectorProps extends Omit<
   React.HTMLAttributes<HTMLElement>,
   "children"
 > {}
 export function BreakPointSelector({ className }: BreakPointSelectorProps) {
-  const { breakpoint } = useStore(
-    useShallow((state) => ({ breakpoint: state.breakpoint })),
-  );
+  const { editMode, breakpoint, setBreakpoint } = useGridLayoutContext();
+  if (!editMode) {
+    return null;
+  }
   return (
     <div className={className}>
       {breakpointsList.map((bp) => (
@@ -24,7 +31,7 @@ export function BreakPointSelector({ className }: BreakPointSelectorProps) {
               : "bg-foreground text-background",
             className,
           )}
-          onClick={() => useStore.setState({ breakpoint: bp })}
+          onClick={() => setBreakpoint(bp)}
         >
           {breakPointsLabels[bp]}
         </button>

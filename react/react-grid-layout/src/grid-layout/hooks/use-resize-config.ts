@@ -1,8 +1,8 @@
 import type { ResizeConfig } from "react-grid-layout/core";
-import { useStore } from "../store";
+import { useGridLayoutContext } from "../context";
 
 export function useResizeConfig(): Partial<ResizeConfig> {
-  const editMode = useStore((state) => state.editMode);
+  const { editMode } = useGridLayoutContext();
   return {
     enabled: editMode,
     handles: ["se", "e", "s"] as const,

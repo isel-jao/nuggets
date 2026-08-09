@@ -1,7 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import widgetsManifests from "../../widgets";
-import { useStore } from "../../store";
-import { useShallow } from "zustand/shallow";
+import { useGridLayoutContext } from "../../grid-layout/context";
 
 interface WidgetsInspectorProps extends Omit<
   React.HTMLAttributes<HTMLElement>,
@@ -12,6 +11,10 @@ export function WidgetsInspector({
   className,
   ...props
 }: WidgetsInspectorProps) {
+  const { editMode } = useGridLayoutContext();
+  if (!editMode) {
+    return null;
+  }
   return (
     <div
       className={twMerge(
@@ -41,11 +44,7 @@ export function WidgetItem({
   widgetKey,
   ...props
 }: WidgetItemProps) {
-  const { setDraggedWidget } = useStore(
-    useShallow((state) => ({
-      setDraggedWidget: state.setDraggedWidget,
-    })),
-  );
+  const { setDraggedWidget } = useGridLayoutContext();
 
   const widgetManifest = widgetsManifests[widgetKey];
   if (!widgetManifest) {

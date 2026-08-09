@@ -1,113 +1,103 @@
-import { Responsive, type Layout, type LayoutItem } from "react-grid-layout";
-import { useShallow } from "zustand/shallow";
+import { useState } from "react";
+import {
+  GridLayoutProvider,
+  useGridLayoutContext,
+} from "./grid-layout/context";
+import widgetsManifests from "./widgets";
 import { EditModeToggle } from "./components/edit-mode-toggle";
 import { BreakPointSelector } from "./components/break-point-selector";
-import { useStore } from "./store";
-import { breakpoints, cols, GRID_MARGIN, ROW_HEIGHT } from "./constant";
-import { GridContainer } from "./components/grid-container";
-import { useStyleConfig } from "./hooks/use-style-config";
-import widgetsManifests from "./widgets";
-import "react-grid-layout/css/styles.css";
+import { GridContainer } from "./grid-layout/components/grid-container";
+import { ResponsiveGrid } from "./grid-layout/components/responsive-grid";
 import { WidgetsInspector } from "./components/widget-inspector";
-import { useCallback } from "react";
-import { WidgetRender } from "./components/widget-renderer";
-import { useResizeConfig } from "./hooks/use-resize-config";
-import { useDropConfig } from "./hooks/use-drop-config";
-import { useDragConfig } from "./hooks/use-drag-config";
+import { twMerge } from "tailwind-merge";
 
+const widgetSizes: Record<string, any> = {};
+for (const [key, manifest] of Object.entries(widgetsManifests)) {
+  widgetSizes[key] = manifest.sizes;
+}
 export default function App() {
-  const { style, width } = useStyleConfig();
-  const { layout, editMode, breakpoint, draggedWidget, widgetList } = useStore(
-    useShallow((state) => ({
-      layout: state.layout,
-      editMode: state.editMode,
-      breakpoint: state.breakpoint,
-      draggedWidget: state.draggedWidget,
-      widgetList: state.widgetList,
-    })),
-  );
+  const [widgetList, setWidgetList] = useState<
+    { id: string; widgetKey: string }[]
+  >([]);
 
-  const dragConfig = useDragConfig();
-  const resizeConfig = useResizeConfig();
-
-  const dropConfig = useDropConfig();
-
-  const handleDrop = useCallback(
-    async (_layout: Layout, item: LayoutItem | undefined, _e: Event) => {
-      if (!item || !draggedWidget) {
-        return;
-      }
-      const { breakpoint } = useStore.getState();
-      const widgetManifest = widgetsManifests[draggedWidget];
-      if (!widgetManifest) {
-        throw new Error(`Widget manifest not found for key: ${draggedWidget}`);
-      }
+  function addWidget(key: string): Promise<{ id: string }> {
+    return new Promise((resolve) => {
       const id = new Date().getTime().toString();
-      const newItem: LayoutItem = {
-        i: id,
-        x: item.x,
-        y: item.y,
-        ...widgetManifest.sizes,
-      };
-      const newWidget = {
-        id,
-        widgetKey: draggedWidget,
-      };
-      useStore.setState((state) => {
-        const newLayout = { ...state.layout };
-        for (const key in newLayout) {
-          const bp = key as keyof typeof newLayout;
-          if (bp === breakpoint) {
-            newLayout[bp] = [...newLayout[bp], newItem];
-          } else {
-            const maxY = newLayout[bp].reduce((max, item) => {
-              return Math.max(max, item.y + item.h);
-            }, 0);
-            newLayout[bp] = [...newLayout[bp], { ...newItem, y: maxY }];
-          }
-        }
-
-        return {
-          widgetList: [...state.widgetList, newWidget],
-          layout: newLayout,
-          draggedWidget: null,
-        };
-      });
-    },
-
-    [breakpoint, draggedWidget],
-  );
+      setWidgetList((prevList) => [...prevList, { id, widgetKey: key }]);
+      resolve({ id });
+    });
+  }
 
   return (
-    <main className="p-6  flex flex-col gap-3">
-      <div className="border px-1.5 py-1 rounded-lg flex justify-between">
-        <EditModeToggle />
-        {editMode && <BreakPointSelector />}
-      </div>
-      <div className="flex  gap-4 debug h-1 flex-1">
-        {editMode && <WidgetsInspector />}
-        <GridContainer className="overflow-auto flex-1 ">
-          <Responsive
-            breakpoint={editMode ? breakpoint : undefined}
-            dropConfig={dropConfig}
-            dragConfig={dragConfig}
-            resizeConfig={resizeConfig}
-            breakpoints={breakpoints}
-            cols={cols}
-            width={width}
-            rowHeight={ROW_HEIGHT}
-            margin={GRID_MARGIN}
-            containerPadding={[0, 0]}
-            style={style}
-            layouts={layout}
-            onDrop={handleDrop}
-          >
-            {widgetList.map((widget) => (
-              <WidgetRender key={widget.id} widget={widget} />
-            ))}
-          </Responsive>
-        </GridContainer>
-      </div>
-    </main>
+    <GridLayoutProvider
+      dragHandleClassName=".custom-drag-handle"
+      addWidgetHandler={addWidget}
+      widgetSizes={widgetSizes}
+    >
+      <main className="p-6  flex flex-col gap-3">
+        <div className="border px-1.5 py-1 rounded-lg flex justify-between">
+          <EditModeToggle />
+          <BreakPointSelector />
+        </div>
+        <div className="flex  gap-4  h-1 flex-1">
+          <WidgetsInspector />
+          <GridContainer className="overflow-auto flex-1 ">
+            <ResponsiveGrid className="w-full h-full">
+              {Object.entries(widgetList).map(([_, { id, widgetKey }]) => {
+                const WidgetComponent = widgetsManifests[widgetKey].Render;
+                return (
+                  <div
+                    key={id}
+                    className="border select-none bg-card group rounded-lg p-2 w-full h-full relative"
+                  >
+                    <div
+                      className={twMerge(
+                        " custom-drag-handle ",
+                        "opacity-0 group-hover:opacity-100 transition-opacity",
+                        "absolute top-0 left-0 w-full",
+                        "flex items-center ",
+                        "bg-foreground text-background h-7 ",
+                      )}
+                    >
+                      <span className="px-2 h-full flex-1 content-center cursor-grab active:cursor-grabbing ">
+                        drag handle
+                      </span>
+                      <DeleteWidgetButton
+                        setWidgetList={setWidgetList}
+                        id={id}
+                      />
+                    </div>
+                    <WidgetComponent id={id} />
+                  </div>
+                );
+              })}
+            </ResponsiveGrid>
+          </GridContainer>
+        </div>
+      </main>
+    </GridLayoutProvider>
+  );
+}
+
+interface DeleteWidgetButtonProps {
+  setWidgetList: React.Dispatch<
+    React.SetStateAction<{ id: string; widgetKey: string }[]>
+  >;
+  id: string;
+}
+
+function DeleteWidgetButton({ setWidgetList, id }: DeleteWidgetButtonProps) {
+  const { deleteWidget } = useGridLayoutContext();
+  function handleDelete() {
+    deleteWidget(id);
+    setWidgetList((prevList) => prevList.filter((widget) => widget.id !== id));
+  }
+  return (
+    <button
+      className="h-full aspect-square  flex rounded justify-center items-center text-red-500 hover:bg-red-500/10"
+      onClick={handleDelete}
+    >
+      X
+    </button>
   );
 }

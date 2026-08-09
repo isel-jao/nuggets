@@ -1,8 +1,6 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
-import { useShallow } from "zustand/shallow";
-import { useStore } from "../../store";
-import { sortedBreakpoints } from "../../constant";
+import { useGridLayoutContext } from "../../grid-layout/context";
 
 interface EditModeToggleProps extends Omit<
   React.HTMLAttributes<HTMLButtonElement>,
@@ -10,20 +8,35 @@ interface EditModeToggleProps extends Omit<
 > {}
 
 export function EditModeToggle({ className, ...props }: EditModeToggleProps) {
-  const { editMode } = useStore(
-    useShallow((state) => ({ editMode: state.editMode })),
-  );
+  const {
+    editMode,
+    containerRef,
+    setEditMode,
+    setBreakpoint,
+    sortedBreakpoints,
+  } = useGridLayoutContext();
+
+  function getBreakpointForWidth(width: number) {
+    let index = 0;
+    for (let i = 0; i < sortedBreakpoints.length; i++) {
+      const [_, minWidth] = sortedBreakpoints[i];
+      if (width >= minWidth) {
+        index = i;
+      } else {
+        break;
+      }
+    }
+    return sortedBreakpoints[index][0];
+  }
 
   function handleToggleEditMode() {
-    const { ref } = useStore.getState();
-    if (editMode || !ref?.current) {
-      useStore.setState({ editMode: !editMode });
-      return;
-    }
-    const width = ref.current.getBoundingClientRect().width;
+    if (!editMode && containerRef?.current) {
+      const width = containerRef.current.getBoundingClientRect().width;
 
-    const breakpoint = getBreakpointForWidth(width);
-    useStore.setState({ editMode: !editMode, breakpoint });
+      const breakpoint = getBreakpointForWidth(width);
+      setBreakpoint(breakpoint);
+    }
+    setEditMode(!editMode);
   }
 
   return (
@@ -39,17 +52,4 @@ export function EditModeToggle({ className, ...props }: EditModeToggleProps) {
       edit Mode
     </button>
   );
-}
-
-function getBreakpointForWidth(width: number) {
-  let index = 0;
-  for (let i = 0; i < sortedBreakpoints.length; i++) {
-    const [_, minWidth] = sortedBreakpoints[i];
-    if (width >= minWidth) {
-      index = i;
-    } else {
-      break;
-    }
-  }
-  return sortedBreakpoints[index][0];
 }

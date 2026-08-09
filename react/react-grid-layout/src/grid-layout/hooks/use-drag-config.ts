@@ -1,9 +1,10 @@
 import type { DragConfig } from "react-grid-layout/core";
-import { useStore } from "../store";
+import { useGridLayoutContext } from "../context";
 
 export function useDragConfig(): Partial<DragConfig> {
-  const editMode = useStore((state) => state.editMode);
+  const { editMode, dragHandleClassName } = useGridLayoutContext();
   return {
     enabled: editMode,
+    handle: dragHandleClassName,
   };
 }

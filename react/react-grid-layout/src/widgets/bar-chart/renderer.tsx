@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { ChartCard, ChartTooltip, HorizontalGrid } from "../lib/chart";
 import { seriesColors } from "../lib/palette";
 import { columnPath, labelStride, niceScale, scaleLinear } from "../lib/scales";
