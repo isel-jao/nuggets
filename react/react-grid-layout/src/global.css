@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+.debug {
+    border: 1px solid red !important;
+
+    &>* {
+        border: 1px solid green !important;
+    }
+
+    &>* {
+        border: 1px solid blue !important;
+    }
+}
+
+@layer base {
+
+    :root,
+    main,
+    body {
+        height: 100%;
+    }
+
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+
+        font-family: monospace;
+    }
+
+    .container {
+        @apply p-6;
+    }
+
+
+    button,
+    a,
+    [role="button"],
+    [role="link"] {
+        cursor: pointer;
+    }
+}
+
+@theme {
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-border: var(--border);
+
+    /* categorical series slots — assigned in fixed order, never cycled */
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+    --color-chart-6: var(--chart-6);
+    --color-chart-7: var(--chart-7);
+    --color-chart-8: var(--chart-8);
+
+    /* sequential ramp (magnitude: heatmaps, meters) */
+    --color-seq-1: var(--seq-1);
+    --color-seq-2: var(--seq-2);
+    --color-seq-3: var(--seq-3);
+    --color-seq-4: var(--seq-4);
+    --color-seq-5: var(--seq-5);
+
+    /* chart chrome */
+    --color-chart-grid: var(--chart-grid);
+    --color-chart-axis: var(--chart-axis);
+
+    /* status — reserved, never reused as a series color */
+    --color-good: var(--good);
+    --color-warning: var(--warning);
+    --color-serious: var(--serious);
+    --color-critical: var(--critical);
+}
+
+
+:root {
+    --primary: light-dark(#2563eb, #3b82f6);
+    --primary-foreground: light-dark(#ffffff, #ffffff);
+
+    --background: light-dark(#f4f4f5, #09090b);
+    --foreground: light-dark(#18181b, #fafafa);
+
+    --muted: light-dark(#71717a, #a1a1aa);
+    --muted-foreground: light-dark(#52525b, #71717a);
+
+    --card: light-dark(#fafafa, #18181b);
+    --card-foreground: light-dark(#09090b, #f4f4f5);
+
+    --border: light-dark(#e4e4e7, #27272a);
+
+    /*
+     * Data-viz tokens. Both columns are selected for their own surface (the
+     * widget card: #fafafa light / #18181b dark) — the dark column is the same
+     * eight hues re-stepped, not an automatic flip. Validated as a set:
+     * adjacent-pair CVD dE 9.1 light / 8.4 dark, normal-vision 19.6 / 19.3.
+     * Aqua, yellow and magenta sit under 3:1 on the light surface by design —
+     * every chart ships a legend, direct labels and a table view so identity
+     * is never carried by hue alone.
+     */
+    --chart-1: light-dark(#2a78d6, #3987e5);
+    --chart-2: light-dark(#eb6834, #d95926);
+    --chart-3: light-dark(#1baf7a, #199e70);
+    --chart-4: light-dark(#eda100, #c98500);
+    --chart-5: light-dark(#e87ba4, #d55181);
+    --chart-6: light-dark(#008300, #008300);
+    --chart-7: light-dark(#4a3aa7, #9085e9);
+    --chart-8: light-dark(#e34948, #e66767);
+
+    /* one hue, ordered by distance from the surface in both modes */
+    --seq-1: light-dark(#cde2fb, #0d366b);
+    --seq-2: light-dark(#9ec5f4, #184f95);
+    --seq-3: light-dark(#5598e7, #256abf);
+    --seq-4: light-dark(#2a78d6, #3987e5);
+    --seq-5: light-dark(#184f95, #86b6ef);
+
+    --chart-grid: light-dark(#e1e0d9, #2c2c2a);
+    --chart-axis: light-dark(#c3c2b7, #383835);
+
+    /* fixed across themes — always paired with an icon + label */
+    --good: #0ca30c;
+    --warning: #fab219;
+    --serious: #ec835a;
+    --critical: #d03b3b;
+
+    color-scheme: light dark;
+
+}
