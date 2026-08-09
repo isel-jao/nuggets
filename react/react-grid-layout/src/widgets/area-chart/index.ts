@@ -8,6 +8,6 @@ export const areaChartWidget: WidgetManifest = {
   description: "A single series over time, with volume shown as a wash.",
   category: "chart",
   Icon,
-  sizes: { w: 4, h: 3, minW: 3, minH: 2 },
+  sizes: { w: 4, h: 12, minW: 3, minH: 8 },
   Render: Renderer,
 };

@@ -3,14 +3,17 @@ import { useShallow } from "zustand/shallow";
 import { EditModeToggle } from "./components/edit-mode-toggle";
 import { BreakPointSelector } from "./components/break-point-selector";
 import { useStore } from "./store";
-import { breakpoints, cols, GRID_MARGIN } from "./constant";
+import { breakpoints, cols, GRID_MARGIN, ROW_HEIGHT } from "./constant";
 import { GridContainer } from "./components/grid-container";
 import { useStyleConfig } from "./hooks/use-style-config";
 import widgetsManifests from "./widgets";
 import "react-grid-layout/css/styles.css";
 import { WidgetsInspector } from "./components/widget-inspector";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { WidgetRender } from "./components/widget-renderer";
+import { useResizeConfig } from "./hooks/use-resize-config";
+import { useDropConfig } from "./hooks/use-drop-config";
+import { useDragConfig } from "./hooks/use-drag-config";
 
 export default function App() {
   const { style, width } = useStyleConfig();
@@ -23,34 +26,11 @@ export default function App() {
       widgetList: state.widgetList,
     })),
   );
-  const dragConfig = useMemo(() => {
-    return {
-      enabled: editMode,
-    };
-  }, [editMode]);
 
-  const resizeConfig = useMemo(
-    () => ({
-      enabled: editMode,
-      handles: ["se"] as const,
-    }),
-    [editMode],
-  );
+  const dragConfig = useDragConfig();
+  const resizeConfig = useResizeConfig();
 
-  const dropConfig = useMemo(() => {
-    if (!editMode || draggedWidget === null) {
-      return {
-        enabled: false,
-      };
-    }
-    const defaultItem = { w: 2, h: 2 };
-    const sizes = widgetsManifests[draggedWidget]?.sizes ?? defaultItem;
-    return {
-      enabled: true,
-      defaultItem,
-      onDragOver: editMode ? () => sizes : undefined,
-    };
-  }, [editMode, draggedWidget]);
+  const dropConfig = useDropConfig();
 
   const handleDrop = useCallback(
     async (_layout: Layout, item: LayoutItem | undefined, _e: Event) => {
@@ -109,7 +89,7 @@ export default function App() {
         <EditModeToggle />
         {editMode && <BreakPointSelector />}
       </div>
-      <div className="flex  h-full gap-4">
+      <div className="flex  gap-4 debug h-1 flex-1">
         {editMode && <WidgetsInspector />}
         <GridContainer className="overflow-auto flex-1 ">
           <Responsive
@@ -120,6 +100,7 @@ export default function App() {
             breakpoints={breakpoints}
             cols={cols}
             width={width}
+            rowHeight={ROW_HEIGHT}
             margin={GRID_MARGIN}
             containerPadding={[0, 0]}
             style={style}

@@ -1,11 +1,13 @@
-import React, { memo } from "react";
+import React from "react";
 import { twMerge } from "tailwind-merge";
 import widgetsManifests from "../../widgets";
 
-interface WidgetRenderProps extends Omit<
-  React.HTMLAttributes<HTMLElement>,
-  "children"
-> {
+/**
+ * `children` is not decoration here: react-grid-layout clones this element and
+ * appends the resize handles to its children. Drop them and the item is still
+ * draggable (that binds to the DOM node via ref) but silently unresizable.
+ */
+interface WidgetRenderProps extends React.HTMLAttributes<HTMLElement> {
   widget: {
     id: string;
     widgetKey: string;
@@ -15,6 +17,7 @@ interface WidgetRenderProps extends Omit<
 export function WidgetRender({
   className,
   widget,
+  children,
   ...props
 }: WidgetRenderProps) {
   const countRef = React.useRef(0);
@@ -38,6 +41,7 @@ export function WidgetRender({
       {...props}
     >
       <widgetManifest.Render id={widget.id} />
+      {children}
     </div>
   );
 }

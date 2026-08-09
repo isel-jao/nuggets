@@ -8,6 +8,6 @@ export const heatmapWidget: WidgetManifest = {
   description: "Magnitude across a day-by-week grid, on one sequential hue.",
   category: "chart",
   Icon,
-  sizes: { w: 4, h: 3, minW: 3, minH: 2 },
+  sizes: { w: 4, h: 12, minW: 3, minH: 8 },
   Render: Renderer,
 };

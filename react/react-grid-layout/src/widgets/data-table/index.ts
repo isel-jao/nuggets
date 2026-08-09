@@ -8,6 +8,6 @@ export const dataTableWidget: WidgetManifest = {
   description: "Sortable rows with reserved status colors.",
   category: "list",
   Icon,
-  sizes: { w: 4, h: 3, minW: 3, minH: 2 },
+  sizes: { w: 4, h: 12, minW: 3, minH: 8 },
   Render: Renderer,
 };
