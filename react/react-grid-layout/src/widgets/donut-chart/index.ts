@@ -8,6 +8,6 @@ export const donutChartWidget: WidgetManifest = {
   description: "Part-to-whole split across a handful of categories.",
   category: "chart",
   Icon,
-  sizes: { w: 3, h: 8, minW: 2, minH: 6 },
+  sizes: { w: 4, h: 3, minW: 3, minH: 2 },
   Render: Renderer,
 };

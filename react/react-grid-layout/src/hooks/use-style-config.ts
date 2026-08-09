@@ -60,8 +60,7 @@ export const useStyleConfig = () => {
       margin: marginX,
     });
     const cellH = ROW_HEIGHT + marginY;
-    const gridPattern = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${cellW + marginX}' height='${cellH}'%3E%3Crect x='0.5' y='0.5' width='${cellW + marginX}' height='${ROW_HEIGHT + marginY}' fill='none' stroke='%23333333' stroke-width='1'/%3E%3C/svg%3E")`;
-
+    const gridPattern = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${cellW + marginX}' height='${cellH}'%3E%3Crect x='0.5' y='0.5' width='${cellW - 1}' height='${ROW_HEIGHT - 1}' fill='none' stroke='%23333333' stroke-width='1'/%3E%3C/svg%3E")`;
     return {
       backgroundImage: gridPattern,
       backgroundAttachment: "local",
@@ -76,7 +75,6 @@ export const useStyleConfig = () => {
 
   const style = {
     ...baseStyle,
-    backgroundColor: "#7f7f7f3f",
     ...(editMode && isInteracting ? getGridBackground() : {}),
   };
 

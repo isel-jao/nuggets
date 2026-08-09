@@ -9,6 +9,12 @@ type Store = {
   editMode: boolean;
   isInteracting: boolean;
   ref: RefObject<HTMLDivElement | null> | null;
+  draggedWidget: string | null;
+  widgetList: {
+    id: string;
+    widgetKey: string;
+  }[];
+  setDraggedWidget: (widgetKey: string | null) => void;
 };
 
 export const useStore = create<Store>()((set) => ({
@@ -16,6 +22,7 @@ export const useStore = create<Store>()((set) => ({
   editMode: false,
   isInteracting: true,
   ref: null,
+  widgetList: [],
   layout: {
     "desktop-ultra-wide": [],
     "desktop-wide": [],
@@ -23,4 +30,6 @@ export const useStore = create<Store>()((set) => ({
     tablet: [],
     mobile: [],
   },
+  draggedWidget: null,
+  setDraggedWidget: (widgetKey) => set({ draggedWidget: widgetKey }),
 }));

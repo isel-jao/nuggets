@@ -8,6 +8,6 @@ export const clockWidget: WidgetManifest = {
   description: "Local time and date, ticking every second.",
   category: "utility",
   Icon,
-  sizes: { w: 3, h: 5, minW: 2, minH: 4 },
+  sizes: { w: 4, h: 3, minW: 3, minH: 2 },
   Render: Renderer,
 };

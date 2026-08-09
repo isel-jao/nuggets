@@ -8,6 +8,6 @@ export const lineChartWidget: WidgetManifest = {
   description: "Trend over time, with series compared year over year.",
   category: "chart",
   Icon,
-  sizes: { w: 5, h: 8, minW: 3, minH: 5 },
+  sizes: { w: 4, h: 3, minW: 3, minH: 2 },
   Render: Renderer,
 };

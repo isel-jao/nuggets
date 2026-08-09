@@ -1,4 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
+import type { LayoutItem } from "react-grid-layout";
 
 export const widgetCategories = ["chart", "metric", "list", "utility"] as const;
 
@@ -30,6 +31,6 @@ export interface WidgetManifest {
   description: string;
   category: WidgetCategory;
   Icon: WidgetIcon;
-  sizes: WidgetSizes;
+  sizes: Pick<LayoutItem, "w" | "h" | "minW" | "minH" | "maxW" | "maxH">;
   Render: ComponentType<WidgetRenderProps>;
 }

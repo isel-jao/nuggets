@@ -6,8 +6,14 @@ import { compact, integer } from "../lib/format";
 import { monthLabels, randomWalk } from "../lib/data";
 
 const series = [
-  { label: "2026", values: randomWalk(7, 12, { start: 420, volatility: 90, drift: 14 }) },
-  { label: "2025", values: randomWalk(21, 12, { start: 380, volatility: 70, drift: 6 }) },
+  {
+    label: "2026",
+    values: randomWalk(7, 12, { start: 420, volatility: 90, drift: 14 }),
+  },
+  {
+    label: "2025",
+    values: randomWalk(21, 12, { start: 380, volatility: 70, drift: 6 }),
+  },
 ];
 
 const PADDING = { top: 12, right: 34, bottom: 20, left: 40 };
@@ -52,7 +58,9 @@ export function Renderer() {
         const handleMove = (event: MouseEvent) => {
           const rect = svgRef.current?.getBoundingClientRect();
           if (!rect) return;
-          const index = Math.round((event.clientX - rect.left - PADDING.left) / step);
+          const index = Math.round(
+            (event.clientX - rect.left - PADDING.left) / step,
+          );
           setHovered(Math.min(Math.max(index, 0), monthLabels.length - 1));
         };
 
@@ -90,7 +98,12 @@ export function Renderer() {
               {series.map((item, seriesIndex) => (
                 <path
                   key={item.label}
-                  d={polyline(item.values.map((value, index) => ({ x: x(index), y: y(value) })))}
+                  d={polyline(
+                    item.values.map((value, index) => ({
+                      x: x(index),
+                      y: y(value),
+                    })),
+                  )}
                   fill="none"
                   stroke={seriesColors[seriesIndex]}
                   strokeWidth={2}

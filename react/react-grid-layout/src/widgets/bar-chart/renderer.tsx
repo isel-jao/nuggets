@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ChartCard, ChartTooltip, HorizontalGrid } from "../lib/chart";
 import { seriesColors } from "../lib/palette";
 import { columnPath, labelStride, niceScale, scaleLinear } from "../lib/scales";
@@ -48,7 +48,12 @@ export function Renderer() {
 
         return (
           <>
-            <svg width={width} height={height} role="img" aria-label="Revenue by channel">
+            <svg
+              width={width}
+              height={height}
+              role="img"
+              aria-label="Revenue by channel"
+            >
               <HorizontalGrid
                 ticks={scale.ticks}
                 y={y}
