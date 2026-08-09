@@ -8,6 +8,7 @@ export const statCardWidget: WidgetManifest = {
   description: "One headline number with its delta and a trend sparkline.",
   category: "metric",
   Icon,
-  sizes: { w: 4, h: 12, minH: 8, minW: 3 },
+  /** Floor is the content: the value, its delta and the 40px spark stop fitting below h:5. */
+  sizes: { w: 3, h: 6, minW: 2, minH: 5 },
   Render: Renderer,
 };

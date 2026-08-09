@@ -20,18 +20,11 @@ export function WidgetRender({
   children,
   ...props
 }: WidgetRenderProps) {
-  const countRef = React.useRef(0);
   const widgetManifest = widgetsManifests[widget.widgetKey];
   if (!widgetManifest) {
     throw new Error(`Widget manifest not found for key: ${widget.widgetKey}`);
   }
 
-  console.log(
-    `Rendering widget ${widget.widgetKey} with id ${widget.id}. Render count: ${
-      countRef.current + 1
-    }`,
-  );
-  countRef.current += 1;
   return (
     <div
       className={twMerge(

@@ -11,6 +11,7 @@ export const barChartWidget: WidgetManifest = {
   description: "Compare a measure across categories.",
   category: "chart",
   Icon,
-  sizes: { w: 4, h: 12, minW: 3, minH: 8 },
+  /** Six bands wide, tall enough to keep the gridline labels off each other. */
+  sizes: { w: 4, h: 8, minW: 3, minH: 6 },
   Render: MemoizedRenderer,
 };

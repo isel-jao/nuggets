@@ -42,11 +42,6 @@ export default function App() {
       if (!widgetManifest) {
         throw new Error(`Widget manifest not found for key: ${draggedWidget}`);
       }
-      console.log({
-        sizes: widgetManifest.sizes,
-        item,
-        breakpoint,
-      });
       const id = new Date().getTime().toString();
       const newItem: LayoutItem = {
         i: id,

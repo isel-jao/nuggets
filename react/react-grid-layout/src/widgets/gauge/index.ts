@@ -8,6 +8,7 @@ export const gaugeWidget: WidgetManifest = {
   description: "A single ratio against its limit, with a severity read-out.",
   category: "metric",
   Icon,
-  sizes: { w: 4, h: 12, minW: 3, minH: 8 },
+  /** The arc scales to the shorter side, so height is what buys a readable dial. */
+  sizes: { w: 3, h: 7, minW: 2, minH: 5 },
   Render: Renderer,
 };

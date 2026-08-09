@@ -8,6 +8,7 @@ export const areaChartWidget: WidgetManifest = {
   description: "A single series over time, with volume shown as a wash.",
   category: "chart",
   Icon,
-  sizes: { w: 4, h: 12, minW: 3, minH: 8 },
+  /** Thirty daily points — the widest default, so the line reads as a trend. */
+  sizes: { w: 6, h: 8, minW: 3, minH: 6 },
   Render: Renderer,
 };
