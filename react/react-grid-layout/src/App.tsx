@@ -1,15 +1,15 @@
 import { useState } from "react";
-import {
-  GridLayoutProvider,
-  useGridLayoutContext,
-} from "./grid-layout/context";
 import widgetsManifests from "./widgets";
 import { EditModeToggle } from "./components/edit-mode-toggle";
 import { BreakPointSelector } from "./components/break-point-selector";
-import { GridContainer } from "./grid-layout/components/grid-container";
-import { ResponsiveGrid } from "./grid-layout/components/responsive-grid";
 import { WidgetsInspector } from "./components/widget-inspector";
 import { twMerge } from "tailwind-merge";
+import {
+  GridContainer,
+  GridLayoutProvider,
+  ResponsiveGrid,
+  useGridLayoutContext,
+} from "./grid-layout";
 
 const widgetSizes: Record<string, any> = {};
 for (const [key, manifest] of Object.entries(widgetsManifests)) {
@@ -41,7 +41,7 @@ export default function App() {
         </div>
         <div className="flex  gap-4  h-1 flex-1">
           <WidgetsInspector />
-          <GridContainer className="overflow-auto flex-1 ">
+          <GridContainer className="overflow-auto debug flex-1 ">
             <ResponsiveGrid className="w-full h-full">
               {Object.entries(widgetList).map(([_, { id, widgetKey }]) => {
                 const WidgetComponent = widgetsManifests[widgetKey].Render;

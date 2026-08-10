@@ -16,26 +16,26 @@ export function EditModeToggle({ className, ...props }: EditModeToggleProps) {
     sortedBreakpoints,
   } = useGridLayoutContext();
 
-  function getBreakpointForWidth(width: number) {
-    let index = 0;
-    for (let i = 0; i < sortedBreakpoints.length; i++) {
-      const [_, minWidth] = sortedBreakpoints[i];
-      if (width >= minWidth) {
-        index = i;
-      } else {
-        break;
-      }
-    }
-    return sortedBreakpoints[index][0];
-  }
+  // function getBreakpointForWidth(width: number) {
+  //   let index = 0;
+  //   for (const [_bp, bpWidth] of sortedBreakpoints) {
+  //     if (width >= bpWidth) {
+  //       index++;
+  //     } else {
+  //       break;
+  //     }
+  //   }
+  //   index = Math.max(0, index - 1);
+  //   return sortedBreakpoints[index]?.[0];
+  // }
 
   function handleToggleEditMode() {
-    if (!editMode && containerRef?.current) {
-      const width = containerRef.current.getBoundingClientRect().width;
+    // if (!editMode && containerRef?.current) {
+    //   const width = containerRef.current.getBoundingClientRect().width;
 
-      const breakpoint = getBreakpointForWidth(width);
-      setBreakpoint(breakpoint);
-    }
+    //   const breakpoint = getBreakpointForWidth(width);
+    //   setBreakpoint(breakpoint);
+    // }
     setEditMode(!editMode);
   }
 

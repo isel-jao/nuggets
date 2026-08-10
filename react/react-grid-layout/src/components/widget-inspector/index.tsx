@@ -53,7 +53,7 @@ export function WidgetItem({
   return (
     <div
       className={twMerge(
-        "p-2 border flex flex-col items-center [&>svg]:size-6 gap-2  rounded",
+        "p-2 border flex flex-col items-center [&>svg]:size-6 gap-2  rounded hover:border-primary transition-colors",
         className,
       )}
       {...props}

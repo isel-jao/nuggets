@@ -1,4 +1,11 @@
-import { createContext, useContext, useRef, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type {
   Breakpoint,
   Breakpoints,
@@ -12,6 +19,7 @@ import {
   defaultRowHeight,
   defaultCols,
   defaultLayouts,
+  resizeObserverDelay,
 } from "./constants";
 import type { LayoutItem } from "react-grid-layout";
 
@@ -23,8 +31,8 @@ export type TGridLayoutContext = {
   rowHeight: number;
   editMode: boolean;
   setEditMode: (editMode: boolean) => void;
-  breakpoint: Breakpoint;
-  setBreakpoint: React.Dispatch<React.SetStateAction<Breakpoint>>;
+  editModeBreakpoint: Breakpoint;
+  setEditModeBreakpoint: React.Dispatch<React.SetStateAction<Breakpoint>>;
   draggedWidget: string | null;
   setDraggedWidget: React.Dispatch<React.SetStateAction<string | null>>;
   layouts: Layouts;
@@ -36,6 +44,9 @@ export type TGridLayoutContext = {
   addWidgetHandler?: (key: string) => Promise<{ id: string }>;
   deleteWidget: (id: string) => void;
   dragHandleClassName?: string;
+  containerWidth: number;
+  calculateBreakpoint: Breakpoint;
+  breakpoint: Breakpoint;
 };
 
 const GridLayoutContext = createContext<TGridLayoutContext | null>(null);
@@ -85,15 +96,20 @@ export function GridLayoutProvider({
     ...initialLayouts,
   };
 
-  const [breakpoint, setBreakpoint] = useState<Breakpoint>("desktop");
+  const [editModeBreakpoint, setEditModeBreakpoint] =
+    useState<Breakpoint>("desktop");
   const [editMode, setEditMode] = useState<boolean>(false);
   const [layouts, setLayouts] = useState<Layouts>(mergedLayouts);
   const [isInteracting, setIsInteracting] = useState<boolean>(false);
   const [draggedWidget, setDraggedWidget] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const sortedBreakpoints = Object.entries(mergedBreakPoints).sort(
-    (a, b) => a[1] - b[1],
-  ) as [Breakpoint, number][];
+
+  const sortedBreakpoints = useMemo(() => {
+    return Object.entries(mergedBreakPoints).sort((a, b) => a[1] - b[1]) as [
+      Breakpoint,
+      number,
+    ][];
+  }, [mergedBreakPoints]);
 
   function deleteWidget(id: string) {
     setLayouts((prevLayouts) => {
@@ -105,14 +121,79 @@ export function GridLayoutProvider({
     });
   }
 
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [containerWidth, setContainerWidth] = useState<number>(0);
+
+  const resizeObserver = useMemo(() => {
+    return new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === containerRef.current) {
+          if (timerRef.current) {
+            clearTimeout(timerRef.current);
+          }
+          timerRef.current = setTimeout(() => {
+            const newWidth =
+              containerRef.current?.getBoundingClientRect().width || 0;
+            console.log("Container width changed:", newWidth);
+            setContainerWidth(newWidth);
+          }, resizeObserverDelay);
+        }
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const containerWidth = containerRef.current.getBoundingClientRect().width;
+    setContainerWidth(containerWidth);
+    resizeObserver.observe(containerRef.current, {
+      box: "border-box",
+    });
+    return () => {
+      resizeObserver.disconnect();
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
+
+  function getBreakpointForWidth(width: number) {
+    let index = 0;
+    for (const [_bp, bpWidth] of sortedBreakpoints) {
+      if (width >= bpWidth) {
+        index++;
+      } else {
+        break;
+      }
+    }
+    index = Math.max(0, index - 1);
+    return sortedBreakpoints[index]?.[0];
+  }
+
+  const calculateBreakpoint = useMemo(() => {
+    return getBreakpointForWidth(containerWidth);
+  }, [sortedBreakpoints, containerWidth]);
+
+  const breakpoint = useMemo(() => {
+    console.log({
+      editMode,
+      editModeBreakpoint,
+      calculateBreakpoint,
+    });
+    return editMode ? editModeBreakpoint : calculateBreakpoint;
+  }, [editMode, editModeBreakpoint, calculateBreakpoint]);
+
   return (
     <GridLayoutContext
       value={{
         sortedBreakpoints,
+        containerWidth,
+        calculateBreakpoint,
         editMode,
         setEditMode,
-        breakpoint,
-        setBreakpoint,
+        editModeBreakpoint,
+        setEditModeBreakpoint,
         layouts,
         setLayouts,
         isInteracting,
@@ -123,6 +204,7 @@ export function GridLayoutProvider({
         breakPoints: mergedBreakPoints,
         cols: mergedCols,
         deleteWidget,
+        breakpoint,
         margin,
         rowHeight,
         ...props,

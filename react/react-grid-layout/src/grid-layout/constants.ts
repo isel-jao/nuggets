@@ -18,8 +18,8 @@ type Breakpoints = {
 
 export const defaultBreakpoints: Breakpoints = {
   "desktop-ultra-wide": 2560,
-  "desktop-wide": 1920,
-  desktop: 1280,
+  "desktop-wide": 1440,
+  desktop: 1024,
   tablet: 768,
   mobile: 480,
 };
@@ -39,3 +39,5 @@ export const defaultLayouts: Record<Breakpoint, LayoutItem[]> = {
   tablet: [],
   mobile: [],
 };
+
+export const resizeObserverDelay = 250;

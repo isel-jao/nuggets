@@ -1,22 +1,12 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useGridLayoutContext } from "../context";
 import { calculateGridColumnWidth } from "../utils";
 
 export const useStyleConfig = () => {
-  const { containerRef, breakpoint, editMode, margin, rowHeight, cols } =
+  const { breakpoint, editMode, margin, rowHeight, cols, breakPoints } =
     useGridLayoutContext();
 
-  const containerWidth =
-    containerRef?.current?.getBoundingClientRect().width || 0;
-
-  const [width, setWidth] = useState<number>(containerWidth);
-
-  useEffect(() => {
-    if (editMode || !containerRef?.current) {
-      setWidth(containerWidth);
-    }
-  }, [breakpoint, editMode, containerRef, containerWidth]);
-
+  const width = breakPoints[breakpoint];
   const getGridBackground = () => {
     const [marginX, marginY] = margin;
     const cellW = calculateGridColumnWidth({
