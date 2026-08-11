@@ -8,34 +8,9 @@ interface EditModeToggleProps extends Omit<
 > {}
 
 export function EditModeToggle({ className, ...props }: EditModeToggleProps) {
-  const {
-    editMode,
-    containerRef,
-    setEditMode,
-    setBreakpoint,
-    sortedBreakpoints,
-  } = useGridLayoutContext();
-
-  // function getBreakpointForWidth(width: number) {
-  //   let index = 0;
-  //   for (const [_bp, bpWidth] of sortedBreakpoints) {
-  //     if (width >= bpWidth) {
-  //       index++;
-  //     } else {
-  //       break;
-  //     }
-  //   }
-  //   index = Math.max(0, index - 1);
-  //   return sortedBreakpoints[index]?.[0];
-  // }
+  const { editMode, setEditMode } = useGridLayoutContext();
 
   function handleToggleEditMode() {
-    // if (!editMode && containerRef?.current) {
-    //   const width = containerRef.current.getBoundingClientRect().width;
-
-    //   const breakpoint = getBreakpointForWidth(width);
-    //   setBreakpoint(breakpoint);
-    // }
     setEditMode(!editMode);
   }
 

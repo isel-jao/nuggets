@@ -9,6 +9,6 @@ export const progressListWidget: WidgetManifest = {
   category: "list",
   Icon,
   /** Five meters fit at h:7; long referrer names are what set the width. */
-  sizes: { w: 3, h: 7, minW: 2, minH: 4 },
+  dimensions: { w: 3, h: 7, minW: 2, minH: 4 },
   Render: Renderer,
 };

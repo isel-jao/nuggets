@@ -3,6 +3,7 @@ import {
   type Breakpoint,
   type Layout,
   type LayoutItem,
+  type ResponsiveLayouts,
 } from "react-grid-layout";
 import { useGridLayoutContext } from "../../context";
 import { useStyleConfig } from "../../hooks/use-style-config";
@@ -10,7 +11,8 @@ import { useDragConfig } from "../../hooks/use-drag-config";
 import { useDropConfig } from "../../hooks/use-drop-config";
 import "react-grid-layout/css/styles.css";
 import type { Layouts } from "../../type";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
+import { useResizeConfig } from "../../hooks/use-resize-config";
 interface ResponsiveGridProps {
   className?: string;
   children: React.ReactNode;
@@ -25,9 +27,11 @@ export function ResponsiveGrid({ className, children }: ResponsiveGridProps) {
     margin,
     cols,
     draggedWidget,
-    widgetSizes,
+    widgetTypeDimensions,
+    onLayoutChange,
     addWidgetHandler,
   } = useGridLayoutContext();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { style, width } = useStyleConfig();
 
@@ -36,7 +40,7 @@ export function ResponsiveGrid({ className, children }: ResponsiveGridProps) {
       if (!item || !draggedWidget || !addWidgetHandler) {
         return;
       }
-      const sizes = widgetSizes[draggedWidget];
+      const sizes = widgetTypeDimensions[draggedWidget];
       if (!sizes) {
         throw new Error(`Widget sizes not found for key: ${draggedWidget}`);
       }
@@ -60,6 +64,12 @@ export function ResponsiveGrid({ className, children }: ResponsiveGridProps) {
                 maxY = itemBottomEdge;
               }
             }
+            if (bp === "mobile") {
+              const mobileCols = cols["mobile"];
+              if (item.w > mobileCols / 2) {
+                newItem.w = mobileCols;
+              }
+            }
             newLayouts[bp] = [
               ...newLayouts[bp],
               {
@@ -73,7 +83,13 @@ export function ResponsiveGrid({ className, children }: ResponsiveGridProps) {
         return newLayouts as Layouts;
       });
     },
-    [breakpoint, draggedWidget, addWidgetHandler, setLayouts, widgetSizes],
+    [
+      breakpoint,
+      draggedWidget,
+      addWidgetHandler,
+      setLayouts,
+      widgetTypeDimensions,
+    ],
   );
 
   const handleResize = useCallback(
@@ -98,11 +114,31 @@ export function ResponsiveGrid({ className, children }: ResponsiveGridProps) {
 
   const dragConfig = useDragConfig();
   const dropConfig = useDropConfig();
+  const resizeConfig = useResizeConfig();
 
+  const handleLayoutChange = useCallback(
+    (_l: Layout, newLayouts: ResponsiveLayouts<Breakpoint>) => {
+      if (!onLayoutChange) {
+        return;
+      }
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+      timerRef.current = setTimeout(() => {
+        const isEqual = JSON.stringify(layouts) === JSON.stringify(newLayouts);
+        if (isEqual) {
+          return;
+        }
+        onLayoutChange(newLayouts as Layouts);
+      }, 250);
+    },
+    [onLayoutChange],
+  );
   return (
     <Responsive
       dragConfig={dragConfig}
       dropConfig={dropConfig}
+      resizeConfig={resizeConfig}
       className={className}
       breakpoint={breakpoint}
       breakpoints={breakPoints}
@@ -115,6 +151,7 @@ export function ResponsiveGrid({ className, children }: ResponsiveGridProps) {
       onDragStop={handleDragStop}
       width={width}
       style={style}
+      onLayoutChange={handleLayoutChange}
       containerPadding={[0, 0]}
     >
       {children}

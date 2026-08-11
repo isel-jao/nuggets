@@ -17,6 +17,9 @@ export type Layouts = {
 
 export type WidgetKey = string;
 
-type Sizes = Pick<LayoutItem, "w" | "h" | "minW" | "minH" | "maxW" | "maxH">;
+export type WidgetDimensions = Pick<
+  LayoutItem,
+  "w" | "h" | "minW" | "minH" | "maxW" | "maxH"
+>;
 
-export type WidgetSizes = Record<WidgetKey, Sizes>;
+export type WidgetTypeDimensions = Record<WidgetKey, WidgetDimensions>;

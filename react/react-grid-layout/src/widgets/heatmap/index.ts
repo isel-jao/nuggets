@@ -9,6 +9,6 @@ export const heatmapWidget: WidgetManifest = {
   category: "chart",
   Icon,
   /** 18 x 7 cells — wide and short, since height only has to carry seven rows. */
-  sizes: { w: 4, h: 7, minW: 3, minH: 5 },
+  dimensions: { w: 4, h: 7, minW: 3, minH: 5 },
   Render: Renderer,
 };

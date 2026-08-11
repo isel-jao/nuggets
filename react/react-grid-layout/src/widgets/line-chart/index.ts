@@ -9,6 +9,6 @@ export const lineChartWidget: WidgetManifest = {
   category: "chart",
   Icon,
   /** Twelve months plus a legend row; under h:6 the card falls back to its table. */
-  sizes: { w: 4, h: 8, minW: 3, minH: 6 },
+  dimensions: { w: 4, h: 8, minW: 3, minH: 6 },
   Render: Renderer,
 };

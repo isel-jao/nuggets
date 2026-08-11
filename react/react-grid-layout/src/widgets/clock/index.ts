@@ -9,6 +9,6 @@ export const clockWidget: WidgetManifest = {
   category: "utility",
   Icon,
   /** Fixed-height content — h:5 is the first row count that clears time, date and meter. */
-  sizes: { w: 3, h: 5, minW: 2, minH: 5 },
+  dimensions: { w: 2, h: 4, minW: 2, minH: 5 },
   Render: Renderer,
 };

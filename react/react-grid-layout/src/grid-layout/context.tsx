@@ -11,7 +11,7 @@ import type {
   Breakpoints,
   Cols,
   Layouts,
-  WidgetSizes,
+  WidgetTypeDimensions,
 } from "./type";
 import {
   defaultBreakpoints,
@@ -40,13 +40,14 @@ export type TGridLayoutContext = {
   isInteracting: boolean;
   setIsInteracting: React.Dispatch<React.SetStateAction<boolean>>;
   containerRef: React.RefObject<HTMLDivElement | null>;
-  widgetSizes: WidgetSizes;
+  widgetTypeDimensions: WidgetTypeDimensions;
   addWidgetHandler?: (key: string) => Promise<{ id: string }>;
   deleteWidget: (id: string) => void;
   dragHandleClassName?: string;
   containerWidth: number;
   calculateBreakpoint: Breakpoint;
   breakpoint: Breakpoint;
+  onLayoutChange?: (layouts: Layouts) => void;
 };
 
 const GridLayoutContext = createContext<TGridLayoutContext | null>(null);
@@ -68,9 +69,10 @@ interface GridLayoutProviderProps {
   rowHeight?: number;
   children: React.ReactNode;
   initialLayouts?: Partial<Layouts>;
-  widgetSizes: WidgetSizes;
+  widgetTypeDimensions: WidgetTypeDimensions;
   dragHandleClassName?: string;
-  addWidgetHandler?: (key: string) => Promise<{ id: string }>;
+  addWidgetHandler?: (type: string) => Promise<{ id: string }>;
+  onLayoutChange?: (layouts: Layouts) => void;
 }
 
 export function GridLayoutProvider({
@@ -135,7 +137,6 @@ export function GridLayoutProvider({
           timerRef.current = setTimeout(() => {
             const newWidth =
               containerRef.current?.getBoundingClientRect().width || 0;
-            console.log("Container width changed:", newWidth);
             setContainerWidth(newWidth);
           }, resizeObserverDelay);
         }
@@ -176,11 +177,6 @@ export function GridLayoutProvider({
   }, [sortedBreakpoints, containerWidth]);
 
   const breakpoint = useMemo(() => {
-    console.log({
-      editMode,
-      editModeBreakpoint,
-      calculateBreakpoint,
-    });
     return editMode ? editModeBreakpoint : calculateBreakpoint;
   }, [editMode, editModeBreakpoint, calculateBreakpoint]);
 

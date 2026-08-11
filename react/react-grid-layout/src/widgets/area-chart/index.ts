@@ -9,6 +9,6 @@ export const areaChartWidget: WidgetManifest = {
   category: "chart",
   Icon,
   /** Thirty daily points — the widest default, so the line reads as a trend. */
-  sizes: { w: 6, h: 8, minW: 3, minH: 6 },
+  dimensions: { w: 6, h: 8, minW: 3, minH: 6 },
   Render: Renderer,
 };

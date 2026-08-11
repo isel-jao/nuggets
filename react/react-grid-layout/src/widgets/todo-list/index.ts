@@ -9,6 +9,6 @@ export const todoListWidget: WidgetManifest = {
   category: "list",
   Icon,
   /** Five tasks and the completion meter fit at h:6; it scrolls below that. */
-  sizes: { w: 3, h: 6, minW: 2, minH: 4 },
+  dimensions: { w: 3, h: 6, minW: 2, minH: 4 },
   Render: Renderer,
 };

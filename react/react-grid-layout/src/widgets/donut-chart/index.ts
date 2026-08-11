@@ -9,6 +9,6 @@ export const donutChartWidget: WidgetManifest = {
   category: "chart",
   Icon,
   /** Square plot with a legend under it: narrow, and tall enough to keep the center label. */
-  sizes: { w: 3, h: 8, minW: 3, minH: 6 },
+  dimensions: { w: 3, h: 8, minW: 3, minH: 6 },
   Render: Renderer,
 };

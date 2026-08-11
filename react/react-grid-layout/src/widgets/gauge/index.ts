@@ -9,6 +9,6 @@ export const gaugeWidget: WidgetManifest = {
   category: "metric",
   Icon,
   /** The arc scales to the shorter side, so height is what buys a readable dial. */
-  sizes: { w: 3, h: 7, minW: 2, minH: 5 },
+  dimensions: { w: 3, h: 7, minW: 2, minH: 5 },
   Render: Renderer,
 };

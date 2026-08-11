@@ -9,6 +9,6 @@ export const statCardWidget: WidgetManifest = {
   category: "metric",
   Icon,
   /** Floor is the content: the value, its delta and the 40px spark stop fitting below h:5. */
-  sizes: { w: 3, h: 6, minW: 2, minH: 5 },
+  dimensions: { w: 3, h: 6, minW: 2, minH: 5 },
   Render: Renderer,
 };
