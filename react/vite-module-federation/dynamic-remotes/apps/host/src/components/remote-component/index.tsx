@@ -3,7 +3,7 @@ import { loadRemote, registerRemotes } from "@module-federation/runtime";
 
 type Listener = () => void;
 
-type RemoteComponentState =
+type RemoteState<T extends unknown = unknown> =
   | {
       isLoading: true;
     }
@@ -13,15 +13,15 @@ type RemoteComponentState =
     }
   | {
       isLoading: false;
-      component: React.ComponentType<any>;
+      remote: T;
     };
 
-const LOADING: RemoteComponentState = { isLoading: true };
+const LOADING = { isLoading: true } as const;
 
-function createRemoteComponentStore() {
+function createRemoteStore<T extends unknown = unknown>() {
   const listeners: Map<string, Set<Listener>> = new Map();
 
-  const components: Map<string, RemoteComponentState> = new Map();
+  const remotes: Map<string, RemoteState<T>> = new Map();
 
   function subscribe(remote: string, name: string, listener: Listener) {
     const key = `${remote}/${name}`;
@@ -30,7 +30,7 @@ function createRemoteComponentStore() {
     }
     const keyListeners = listeners.get(key)!;
     keyListeners.add(listener);
-    loadRemoteComponent(remote, name);
+    load(remote, name);
     return () => {
       keyListeners.delete(listener);
       if (keyListeners.size === 0) {
@@ -43,13 +43,13 @@ function createRemoteComponentStore() {
     listeners.get(key)?.forEach((listener) => listener());
   }
 
-  function getState(remote: string, name: string): RemoteComponentState {
-    return components.get(`${remote}/${name}`) ?? LOADING;
+  function getState(remote: string, name: string): RemoteState {
+    return remotes.get(`${remote}/${name}`) ?? LOADING;
   }
 
-  async function loadRemoteComponent(remote: string, name: string) {
+  async function load(remote: string, name: string) {
     const key = `${remote}/${name}`;
-    if (components.has(key)) return;
+    if (remotes.has(key)) return;
     registerRemotes([
       {
         entry: remote,
@@ -57,15 +57,21 @@ function createRemoteComponentStore() {
         type: "module",
       },
     ]);
-    components.set(key, LOADING);
+    remotes.set(key, LOADING);
     try {
-      const mod = await loadRemote<{ default: React.ComponentType<any> }>(key);
+      const mod = await loadRemote<{
+        default: T;
+      }>(key);
       if (!mod?.default) {
-        throw new Error(`Remote "${key}" has no default export`);
+        remotes.set(key, {
+          isLoading: false,
+          error: new Error(`Remote "${key}" has no default export`),
+        });
+        return;
       }
-      components.set(key, { isLoading: false, component: mod.default });
+      remotes.set(key, { isLoading: false, remote: mod.default });
     } catch (error: unknown) {
-      components.set(key, {
+      remotes.set(key, {
         isLoading: false,
         error: error instanceof Error ? error : new Error(String(error)),
       });
@@ -80,7 +86,24 @@ function createRemoteComponentStore() {
   };
 }
 
-const remoteComponentStore = createRemoteComponentStore();
+const remoteStore = createRemoteStore();
+
+export function useRemote<T extends unknown = unknown>(
+  remote: string,
+  name: string,
+) {
+  const subscribe = useCallback(
+    (listener: Listener) => remoteStore.subscribe(remote, name, listener),
+    [remote, name],
+  );
+  const getSnapshot = useCallback(
+    () => remoteStore.getState(remote, name),
+    [remote, name],
+  );
+
+  const state = useSyncExternalStore(subscribe, getSnapshot);
+  return state as RemoteState<T>;
+}
 
 type RemoteComponentProps = Record<string, unknown> & {
   name: string;
@@ -94,18 +117,7 @@ export function RemoteComponent({
   className,
   ...props
 }: RemoteComponentProps) {
-  // Both must be stable, or React re-subscribes on every render.
-  const subscribe = useCallback(
-    (listener: Listener) =>
-      remoteComponentStore.subscribe(entry, name, listener),
-    [entry, name],
-  );
-  const getSnapshot = useCallback(
-    () => remoteComponentStore.getState(entry, name),
-    [entry, name],
-  );
-
-  const state = useSyncExternalStore(subscribe, getSnapshot);
+  const state = useRemote<React.ComponentType<any>>(entry, name);
 
   if (state.isLoading) {
     return <div className={className}>Loading...</div>;
@@ -121,6 +133,6 @@ export function RemoteComponent({
     );
   }
 
-  const LoadedComponent = state.component;
+  const LoadedComponent = state.remote;
   return <LoadedComponent {...props} />;
 }
