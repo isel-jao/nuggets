@@ -1,0 +1,21 @@
+{
+  "type": "module",
+  "main": "dist/main.js",
+  "scripts": {
+    "clean": "rm -rf dist node_modules && git clean -fdx",
+    "fclean": "pnpm clean && rm -rf package-lock.json pnpm-lock.yaml",
+    "dev:start": "tsx src/main.ts",
+    "dev:watch": "tsx --watch src/main.ts",
+    "start": "node dist/main.js",
+    "build": "pnpm tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@commander-js/extra-typings": "^15.0.0",
+    "commander": "^15.0.0"
+  }
+}
