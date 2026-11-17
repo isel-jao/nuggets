@@ -94,6 +94,7 @@ class RunwayTower implements ControlTower {
         this.#occupant = undefined;
         break;
     }
+    ``;
 
     this.#dispatch();
   }
